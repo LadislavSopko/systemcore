@@ -34,7 +34,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Collections\MySafeCollection.cs" />
+    <Compile Include="Collections\HybridCollection.cs" />
     <Compile Include="Collections\IKeyProvider.cs" />
     <Compile Include="Database\Connection.cs" />
     <Compile Include="Database\DatabaseExeption.cs" />
