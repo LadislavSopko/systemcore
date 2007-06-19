@@ -1,0 +1,78 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{6490CB19-D951-45E3-A16B-512BEDB8023B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>System.Core</RootNamespace>
+    <AssemblyName>System.Core</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Collections\MySafeCollection.cs" />
+    <Compile Include="Collections\IKeyProvider.cs" />
+    <Compile Include="Database\Connection.cs" />
+    <Compile Include="Database\DatabaseExeption.cs" />
+    <Compile Include="Database\ParameterCache.cs" />
+    <Compile Include="Database\StoredProcedure.cs" />
+    <Compile Include="Database\StoredProcedureDictionary.cs" />
+    <Compile Include="LateBinding\ILateBinder.cs" />
+    <Compile Include="LateBinding\LateBinder.cs" />
+    <Compile Include="LateBinding\LateBinderFactory.cs" />
+    <Compile Include="Logging\Common\ILogger.cs" />
+    <Compile Include="Logging\Common\LogFactory.cs" />
+    <Compile Include="Logging\Common\Logger.cs" />
+    <Compile Include="Logging\Common\LogItem.cs" />
+    <Compile Include="Logging\Common\LogLevel.cs" />
+    <Compile Include="Logging\Common\LogSink.cs" />
+    <Compile Include="Logging\Configuration\LogDotNetConfigurationHandler.cs" />
+    <Compile Include="Logging\Configuration\SinkConfigurationElement.cs" />
+    <Compile Include="Logging\Sinks\ConsoleLogSink.cs" />
+    <Compile Include="Logging\Sinks\DatabaseLogSink.cs" />
+    <Compile Include="Logging\Sinks\EventLogSink.cs" />
+    <Compile Include="Logging\Sinks\FileLogSink.cs" />
+    <Compile Include="Logging\Sinks\SmtpLogSink.cs" />
+    <Compile Include="Logging\Sinks\TcpLogSink.cs" />
+    <Compile Include="Logging\Utilities\TcpLogMessageClient.cs" />
+    <Compile Include="Logging\Utilities\TcpLogMessageClientEventArgs.cs" />
+    <Compile Include="Net\FtpConnection.cs" />
+    <Compile Include="Net\FtpConnectionEventArgs.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Validation\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
