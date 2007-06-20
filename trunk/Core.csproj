@@ -63,9 +63,11 @@
     <Compile Include="Net\FtpConnection.cs" />
     <Compile Include="Net\FtpConnectionEventArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Validation\" />
+    <Compile Include="Validation\Attributes\LengthValidatorAttribute.cs" />
+    <Compile Include="Validation\Attributes\ValidatorAttributeBase.cs" />
+    <Compile Include="Validation\ValidationManager.cs" />
+    <Compile Include="Validation\Validators\LengthValidator.cs" />
+    <Compile Include="Validation\Validators\ValidatorBase.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
