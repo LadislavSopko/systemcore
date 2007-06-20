@@ -43,7 +43,7 @@ namespace System.Core.Validation
                 if (!validators[i].IsValid(_target))
                 {                    
                     //Failed to validate    
-                    _validationErrors[validators[i].PropertyInfo.Name] = validators[i].ErrorMessage;
+                    _validationErrors[validators[i].PropertyName] = validators[i].ErrorMessage;
                     break;
                 }
             }
@@ -94,7 +94,7 @@ namespace System.Core.Validation
                     List<ValidatorBase> list = attributeList.ConvertAll<ValidatorBase>(
                         delegate(ValidatorAttributeBase attribute)
                         {
-                            return attribute.CreateValidator(property);
+                            return attribute.CreateValidator(property.GetType(), property.Name);
                         });
 
                     
@@ -117,6 +117,12 @@ namespace System.Core.Validation
         public HybridCollection<string, string> ValidationErrors
         {
             get { return _validationErrors; }
+        }
+
+
+        public static void AddValidator(Type type,ValidatorBase validator,string propertyName)
+        {
+            GetValidators(type)[propertyName].Add(validator);
         }
     }
 }

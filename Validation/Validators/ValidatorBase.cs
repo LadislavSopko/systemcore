@@ -13,23 +13,29 @@ namespace System.Core.Validation
     public abstract class ValidatorBase
     {
         private string _errorMessage;
-        private PropertyInfo _propertyInfo;
+        private Type _propertyType;
+        private string _propertyName;        
         private ILateBinder _latebinder;
         
-        protected ValidatorBase(PropertyInfo propertyInfo,string errorMessage)
+        
+
+
+        protected ValidatorBase(Type propertyType, string propertyName, string errorMessage)
         {
-            if (propertyInfo == null)
-                throw new ArgumentNullException("propertyInfo");
-            
-            _propertyInfo = propertyInfo;
+            _propertyType = propertyType;
+            _propertyName = propertyName;
             _errorMessage = errorMessage;
-            _latebinder = LateBinderFactory.GetLateBinder(propertyInfo.DeclaringType);          
+            _latebinder = LateBinderFactory.GetLateBinder(propertyType);          
         }
 
-
-        internal PropertyInfo PropertyInfo
+        internal Type PropertyType
         {
-            get { return _propertyInfo; }
+            get { return _propertyType; }
+        }
+
+        internal string PropertyName
+        {
+            get { return _propertyName; }
         }
 
         protected ILateBinder Latebinder
@@ -71,7 +77,7 @@ namespace System.Core.Validation
             if (instance == null)
                 throw new ArgumentNullException("instance");
 
-            object value = _latebinder.GetPropertyValue(instance, _propertyInfo.Name);
+            object value = _latebinder.GetPropertyValue(instance, _propertyName);
             return Validate(value);
         }
 

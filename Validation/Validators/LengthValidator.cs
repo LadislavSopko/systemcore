@@ -12,27 +12,19 @@ namespace System.Core.Validation
         private uint _minLength;
         private uint _maxLength;
 
-        public LengthValidator(PropertyInfo propertyInfo, uint maxLength)
-            : this(propertyInfo, 0, maxLength, null)
-        {
-        }
 
-        public LengthValidator(PropertyInfo propertyInfo,uint maxLength,string errorMessage) 
-            : this(propertyInfo,0,maxLength,errorMessage)
-        {
-        }
-
-        public LengthValidator(PropertyInfo propertyInfo, uint minLength, uint maxLength)
-            : this(propertyInfo,minLength,maxLength,null)
-        {         
-        }
-
-        public LengthValidator(PropertyInfo propertyInfo,uint minLength,uint maxLength,string errorMessage) : base(propertyInfo, errorMessage)
+        public LengthValidator(Type propertyType, string propertyName, string errorMessage, uint minLength, uint maxLength) : base(propertyType, propertyName, errorMessage)
         {
             _minLength = minLength;
             _maxLength = maxLength;
-            this.ErrorMessage = "Wrong length";
         }
+        
+        public LengthValidator(Type propertyType, string propertyName, uint minLength, uint maxLength)
+            : base(propertyType, propertyName, null)
+        {
+            _minLength = minLength;
+            _maxLength = maxLength;
+        }                
 
         /// <summary>
         /// Gets the minimum length.

@@ -33,9 +33,11 @@ namespace System.Core.Validation
             _maxLength = maxLength;
         }
 
-        public override ValidatorBase CreateValidator(System.Reflection.PropertyInfo propertyInfo)
+        
+
+        public override ValidatorBase CreateValidator(Type propertyType, string propertyName)
         {
-            return new LengthValidator(propertyInfo, _minLength, _maxLength, ErrorMessage);
+            return new LengthValidator(propertyType, propertyName, ErrorMessage, _minLength, _maxLength);
         }
     }
 }
