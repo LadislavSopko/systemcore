@@ -56,7 +56,7 @@ namespace System.Core.Database
         /// <summary>
         /// Used to get the embedded resources in this assembly 
         /// </summary>
-        private static ResourceManager mResourceManager = new ResourceManager("DbDotNet.ErrorCodes", Assembly.GetExecutingAssembly());
+        private static ResourceManager mResourceManager = new ResourceManager("System.Core.Database.Resources.ErrorCodes", Assembly.GetExecutingAssembly());
 
         /// <summary>
         /// This collection contains all the stored procedures executed on this connection. 
@@ -864,7 +864,7 @@ namespace System.Core.Database
         internal static string GetResourceString(string name, params string[] parameters)
         {
             string resourceValue;
-            resourceValue = string.Format(CultureInfo.InvariantCulture, mResourceManager.GetString(name), parameters);
+            resourceValue = string.Format(CultureInfo.InvariantCulture, mResourceManager.GetString(name), parameters);            
             return resourceValue;
         }
 

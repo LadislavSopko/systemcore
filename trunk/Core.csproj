@@ -39,6 +39,7 @@
     <Compile Include="Database\Connection.cs" />
     <Compile Include="Database\DatabaseExeption.cs" />
     <Compile Include="Database\ParameterCache.cs" />
+    <Compile Include="Database\Resources\ErrorCodes.Designer.cs" />
     <Compile Include="Database\StoredProcedure.cs" />
     <Compile Include="Database\StoredProcedureDictionary.cs" />
     <Compile Include="LateBinding\ILateBinder.cs" />
@@ -73,6 +74,9 @@
     <Compile Include="Validation\Validators\ValidatorBase.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Database\Resources\ErrorCodes.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Validation\Resources\DefaultErrorMessages.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>

@@ -49,6 +49,18 @@ namespace System.Core.Validation
             }
         }
 
+        public bool IsValid()
+        {
+            this.ValidationErrors.Clear();
+            foreach(IList<ValidatorBase> validators in _typeValidators)
+            {
+                RunValidators(validators);
+            }
+            return _validationErrors.Count == 0;
+        }
+
+
+
         public bool IsPropertyValid(string propertyName)
         {        
             //Remove the validation errors before validation
@@ -60,6 +72,9 @@ namespace System.Core.Validation
 
             return !_validationErrors.Contains(propertyName);
         }
+
+
+
 
 
         private static ValidatorCollection GetValidators(Type type)
@@ -117,6 +132,15 @@ namespace System.Core.Validation
         public HybridCollection<string, string> ValidationErrors
         {
             get { return _validationErrors; }
+        }
+
+        public string ValidationError
+        {
+            get
+            {
+                List<string> errorList = new List<string>(_validationErrors);
+                return string.Join(Environment.NewLine, errorList.ToArray()); 
+            }
         }
 
 
