@@ -44,13 +44,16 @@ namespace System.Core.Validation
         #endregion
 
         #region Public Methods
-
+        
         /// <summary>
         /// Creates a validator corresponding to the the type of validator attribute
         /// </summary>
-        /// <param name="propertyInfo">The property info.</param>
+        /// <param name="propertyType">The property type.</param>
+        /// <param name="propertyName">The name of the property for to create the validator.</param>
         /// <returns></returns>
-        public abstract ValidatorBase CreateValidator(PropertyInfo propertyInfo);
+        
+        public abstract ValidatorBase CreateValidator(Type propertyType,string propertyName);
+
 
         #endregion
 
