@@ -8,24 +8,31 @@ using System.Text;
 namespace System.Core.Validation
 {
     /// <summary>
-    /// Base class for implementing validators
+    /// Base class for implementing validators.
     /// </summary>
     public abstract class ValidatorBase
     {
         private string _errorMessage;
         private Type _propertyType;
         private string _propertyName;        
-        private ILateBinder _latebinder;
-        
-        
-
+                        
 
         protected ValidatorBase(Type propertyType, string propertyName, string errorMessage)
         {
+            if (propertyType == null)
+                throw new ArgumentNullException("propertyType");
+
+            if (string.IsNullOrEmpty(propertyName))
+                throw new ArgumentOutOfRangeException("propertyName");
+
+            if (string.IsNullOrEmpty(errorMessage))
+                _errorMessage = string.Format(DefaultErrorMessages.Default, propertyName);
+            else
+                _errorMessage = errorMessage;
+
             _propertyType = propertyType;
             _propertyName = propertyName;
-            _errorMessage = errorMessage;
-            _latebinder = LateBinderFactory.GetLateBinder(propertyType);          
+            _errorMessage = errorMessage;        
         }
 
         internal Type PropertyType
@@ -38,10 +45,7 @@ namespace System.Core.Validation
             get { return _propertyName; }
         }
 
-        protected ILateBinder Latebinder
-        {
-            get { return _latebinder; }
-        }
+        
 
 
         public string ErrorMessage
@@ -76,8 +80,9 @@ namespace System.Core.Validation
         {
             if (instance == null)
                 throw new ArgumentNullException("instance");
+            ILateBinder lateBinder = LateBinderFactory.GetLateBinder(instance.GetType());
 
-            object value = _latebinder.GetPropertyValue(instance, _propertyName);
+            object value = lateBinder.GetPropertyValue(instance, _propertyName);
             return Validate(value);
         }
 

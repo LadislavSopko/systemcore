@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Cobalt.Validation.Resources {
+namespace System.Core.Validation{
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Cobalt.Validation.Resources {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Cobalt.Validation.Resources.DefaultErrorMessages", typeof(DefaultErrorMessages).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("System.Core.Validation.Resources.DefaultErrorMessages", typeof(DefaultErrorMessages).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
