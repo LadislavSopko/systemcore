@@ -6,14 +6,19 @@ namespace System.Core.Validation
 {
     public class RequiredValidator : ValidatorBase
     {
-        public RequiredValidator(Type propertyType, string propertyName, string errorMessage) : base(propertyType, propertyName, errorMessage)
-        {
-        }
 
         public RequiredValidator(Type propertyType, string propertyName)
-            : base(propertyType, propertyName, null)
+            : this(propertyType, propertyName, null)
         {
         }
+        
+        public RequiredValidator(Type propertyType, string propertyName, string errorMessage) : base(propertyType, propertyName, errorMessage)
+        {
+            if (string.IsNullOrEmpty(errorMessage))
+                this.ErrorMessage = string.Format(DefaultErrorMessages.Required, propertyName);
+        }
+
+        
 
         protected override bool Validate(object value)
         {

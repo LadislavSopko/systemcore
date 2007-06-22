@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Core.Collections;
 using System.Reflection;
-using ValidatorCollection = System.Core.Collections.HybridCollection<string, System.Collections.Generic.IList<System.Core.Validation.ValidatorBase>>;
+using PropertyValidators = System.Core.Collections.HybridCollection<string, System.Collections.Generic.IList<System.Core.Validation.ValidatorBase>>;
 
 namespace System.Core.Validation
 {
@@ -13,7 +13,8 @@ namespace System.Core.Validation
         /// <summary>
         /// Stores the Validators for a particular type.
         /// </summary>
-        private static HybridCollection<Type, ValidatorCollection> _typeValidators = new HybridCollection<Type, HybridCollection<string, IList<ValidatorBase>>>();
+
+        private static HybridCollection<Type, PropertyValidators> _typeValidators = new HybridCollection<Type, PropertyValidators>();
 
         /// <summary>
         /// Stores the validation errors for the current target
@@ -52,7 +53,7 @@ namespace System.Core.Validation
         public bool IsValid()
         {
             this.ValidationErrors.Clear();
-            foreach(IList<ValidatorBase> validators in _typeValidators)
+            foreach(IList<ValidatorBase> validators in _typeValidators[_target.GetType()])
             {
                 RunValidators(validators);
             }
@@ -65,7 +66,7 @@ namespace System.Core.Validation
         {        
             //Remove the validation errors before validation
             _validationErrors.Remove(propertyName);
-            ValidatorCollection validators = GetValidators(_target.GetType());
+            PropertyValidators validators = GetValidators(_target.GetType());
 
 
             RunValidators(validators[propertyName]);
@@ -77,7 +78,7 @@ namespace System.Core.Validation
 
 
 
-        private static ValidatorCollection GetValidators(Type type)
+        private static PropertyValidators GetValidators(Type type)
         {
             if (type == null)
                 throw new ArgumentNullException("type");
@@ -85,7 +86,7 @@ namespace System.Core.Validation
             if (!_typeValidators.Contains(type))
             {
                 //Create a new collection to hold the validators for this type
-                ValidatorCollection validators = new ValidatorCollection();
+                PropertyValidators validators = new PropertyValidators();
 
                 //Get a list of properties on this type
                 PropertyInfo[] properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
@@ -112,9 +113,12 @@ namespace System.Core.Validation
                             return attribute.CreateValidator(property.GetType(), property.Name);
                         });
 
-                    
-                    //Add the validators to this property
-                    validators.Add(property.Name, list);
+                    if (list.Count > 0)
+                    {
+                        //Add the validators to this property
+                        validators.Add(property.Name, list);
+                    }
+
                 }
                 //Store the validators for this type 
                 _typeValidators.Add(type, validators);
@@ -146,6 +150,12 @@ namespace System.Core.Validation
 
         public static void AddValidator(Type type,ValidatorBase validator,string propertyName)
         {
+            PropertyValidators list = GetValidators(type);
+            if (!list.Contains(validator.PropertyName))
+            {
+                list.Add(propertyName, new List<ValidatorBase>());
+            }
+
             GetValidators(type)[propertyName].Add(validator);
         }
     }

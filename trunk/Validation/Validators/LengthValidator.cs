@@ -13,18 +13,23 @@ namespace System.Core.Validation
         private uint _maxLength;
 
 
+        public LengthValidator(Type propertyType, string propertyName, uint minLength, uint maxLength)
+            : this(propertyType, propertyName, null,minLength,maxLength)
+        {
+            
+        }                
+
+
         public LengthValidator(Type propertyType, string propertyName, string errorMessage, uint minLength, uint maxLength) : base(propertyType, propertyName, errorMessage)
         {
+            if (string.IsNullOrEmpty(errorMessage))
+                this.ErrorMessage = string.Format(DefaultErrorMessages.Length, propertyName);
+            
             _minLength = minLength;
             _maxLength = maxLength;
         }
         
-        public LengthValidator(Type propertyType, string propertyName, uint minLength, uint maxLength)
-            : base(propertyType, propertyName, null)
-        {
-            _minLength = minLength;
-            _maxLength = maxLength;
-        }                
+        
 
         /// <summary>
         /// Gets the minimum length.
