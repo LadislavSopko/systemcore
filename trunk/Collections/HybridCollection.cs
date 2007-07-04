@@ -63,6 +63,20 @@ namespace System.Core.Collections
                 _dictionary.Add(key, value);
         }
 
+        public void Add(object item)
+        {
+            if (!typeof(IKeyProvider<TKey>).IsAssignableFrom(item.GetType()))
+            {
+                throw new ArgumentException("Object has to implement IKeyProvider<TKey>", "item");
+            }
+            else
+                if (!_dictionary.ContainsKey(((IKeyProvider<TKey>)item).Key))
+                {
+                    _dictionary.Add(((IKeyProvider<TKey>)item).Key,(TValue)item);
+                }
+        }
+        
+        
         public void Add<T>(T value) where T : TValue, IKeyProvider<TKey>
         {
             Add(value.Key, value);
