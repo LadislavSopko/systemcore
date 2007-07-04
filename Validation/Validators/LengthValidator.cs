@@ -23,7 +23,7 @@ namespace System.Core.Validation
         public LengthValidator(Type propertyType, string propertyName, string errorMessage, uint minLength, uint maxLength) : base(propertyType, propertyName, errorMessage)
         {
             if (string.IsNullOrEmpty(errorMessage))
-                this.ErrorMessage = string.Format(DefaultErrorMessages.Length, propertyName);
+                this.ErrorMessage = string.Format(DefaultErrorMessages.Length, propertyName,minLength,maxLength);
             
             _minLength = minLength;
             _maxLength = maxLength;
