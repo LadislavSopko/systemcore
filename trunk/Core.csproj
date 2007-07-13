@@ -43,6 +43,7 @@
     <Compile Include="Database\Resources\ErrorCodes.Designer.cs" />
     <Compile Include="Database\StoredProcedure.cs" />
     <Compile Include="Database\StoredProcedureDictionary.cs" />
+    <Compile Include="Helpers\ApplicationEnvironment.cs" />
     <Compile Include="LateBinding\ILateBinder.cs" />
     <Compile Include="LateBinding\LateBinder.cs" />
     <Compile Include="LateBinding\LateBinderFactory.cs" />
