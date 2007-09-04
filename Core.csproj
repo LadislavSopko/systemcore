@@ -32,11 +32,23 @@
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bitmaps\ResFinder.cs" />
     <Compile Include="Collections\HybridCollection.cs" />
     <Compile Include="Collections\IKeyProvider.cs" />
+    <Compile Include="ComponentModel\BindableProperty.cs" />
+    <Compile Include="ComponentModel\ObjectBindingSource.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ComponentModel\ObjectBindingSource.Designer.cs">
+      <DependentUpon>ObjectBindingSource.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ComponentModel\CustomPropertyAttribute.cs" />
+    <Compile Include="ComponentModel\CustomPropertyDescriptor.cs" />
     <Compile Include="Database\Connection.cs" />
     <Compile Include="Database\DatabaseExeption.cs" />
     <Compile Include="Database\ParameterCache.cs" />
@@ -44,9 +56,10 @@
     <Compile Include="Database\StoredProcedure.cs" />
     <Compile Include="Database\StoredProcedureDictionary.cs" />
     <Compile Include="Helpers\ApplicationEnvironment.cs" />
-    <Compile Include="LateBinding\ILateBinder.cs" />
-    <Compile Include="LateBinding\LateBinder.cs" />
-    <Compile Include="LateBinding\LateBinderFactory.cs" />
+    <Compile Include="Helpers\ReflectionHelper.cs" />
+    <Compile Include="Emit\IDynamicAccessor.cs" />
+    <Compile Include="Emit\DynamicAccessor.cs" />
+    <Compile Include="Emit\DynamicAccessorFactory.cs" />
     <Compile Include="Logging\Common\ILogger.cs" />
     <Compile Include="Logging\Common\LogFactory.cs" />
     <Compile Include="Logging\Common\Logger.cs" />
@@ -85,6 +98,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ToDoList.tdl" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Bitmaps\ObjectDataSource.png" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
