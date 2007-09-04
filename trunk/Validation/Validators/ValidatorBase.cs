@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Core;
-using System.Core.LateBinding;
+using System.Core.Emit;
 using System.Reflection;
 using System.Text;
 
@@ -80,9 +80,9 @@ namespace System.Core.Validation
         {
             if (instance == null)
                 throw new ArgumentNullException("instance");
-            ILateBinder lateBinder = LateBinderFactory.GetLateBinder(instance.GetType());
+            IDynamicAccessor DynamicAccessor = DynamicAccessorFactory.GetDynamicAccessor(instance.GetType());
 
-            object value = lateBinder.GetPropertyValue(instance, _propertyName);
+            object value = DynamicAccessor.GetPropertyValue(instance, _propertyName);
             return Validate(value);
         }
 
