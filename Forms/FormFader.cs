@@ -138,7 +138,22 @@ namespace System.Core.Forms
         /// </summary>
         /// <param name="targetForm">The target form that the fade effect will be applied to</param>
         public FormFader(Form targetForm)
+            : this(targetForm, 5, 10)
         {
+
+        }
+
+        /// <summary>
+        /// /// Creates a new instance of the <see cref="FormFader"/> class
+        /// </summary>
+        /// <param name="targetForm">The target form that the fade effect will be applied to</param>
+        /// <param name="frames">The number of frames to be used in the fade transition.</param>
+        /// <param name="duration">The number of milliseconds for the fade transition</param>
+        public FormFader(Form targetForm, byte frames, int duration)
+        {
+            _frames = frames;
+            _duration = duration;
+
             targetForm.HandleCreated += (targetForm_HandleCreated);
             targetForm.HandleDestroyed += (targetForm_HandleDestroyed);
             targetForm.FormClosing += (targetForm_FormClosing);
@@ -151,19 +166,6 @@ namespace System.Core.Forms
 
             //Calculate the opacity increase/decrease amount for each frame            
             _alphaStep = (byte)(255 / _frames);
-        }
-
-        /// <summary>
-        /// /// Creates a new instance of the <see cref="FormFader"/> class
-        /// </summary>
-        /// <param name="targetForm">The target form that the fade effect will be applied to</param>
-        /// <param name="frames">The number of frames to be used in the fade transition.</param>
-        /// <param name="duration">The number of milliseconds for the fade transition</param>
-        public FormFader(Form targetForm, byte frames, int duration)
-            : this(targetForm)
-        {
-            _frames = frames;
-            _duration = duration;
         }
 
         #endregion
