@@ -55,6 +55,7 @@
     <Compile Include="Database\Resources\ErrorCodes.Designer.cs" />
     <Compile Include="Database\StoredProcedure.cs" />
     <Compile Include="Database\StoredProcedureDictionary.cs" />
+    <Compile Include="Forms\FormFader.cs" />
     <Compile Include="Helpers\ApplicationEnvironment.cs" />
     <Compile Include="Helpers\ReflectionHelper.cs" />
     <Compile Include="Emit\IDynamicAccessor.cs" />
