@@ -106,14 +106,6 @@ namespace System.Core.Forms
 
         #region Constants
 
-
-        /// <summary>
-        /// The WM_SHOWWINDOW message is sent to a window when the window is about to be hidden or shown.
-        /// <para>WParam Specifies whether a window is being shown. If wParam is TRUE, the window is being shown. If wParam is FALSE, the window is being hidden. 
-        /// </para>
-        /// </summary>        
-        private const int WM_SHOWWINDOW = 0x18;
-
         /// <summary>
         /// Used in GetWindowLong and SetWindowLong to get/set the extended style of the target form.
         /// </summary>
@@ -157,7 +149,7 @@ namespace System.Core.Forms
             targetForm.HandleCreated += (targetForm_HandleCreated);
             targetForm.HandleDestroyed += (targetForm_HandleDestroyed);
             targetForm.FormClosing += (targetForm_FormClosing);
-            targetForm.Load += new EventHandler(targetForm_Load);
+            targetForm.Load += (targetForm_Load);
             _targetForm = targetForm;
 
             _timer = new Timer(_duration / _frames);
