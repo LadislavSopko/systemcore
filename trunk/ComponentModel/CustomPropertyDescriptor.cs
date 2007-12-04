@@ -159,5 +159,10 @@ namespace System.Core.ComponentModel
         {
             return false;
         }
+
+        public override string ToString()
+        {
+            return string.Format("Name: {0} , PropertyPath: {1}", Name, _propertyPath);
+        }
     }
 }

@@ -202,7 +202,7 @@ namespace System.Core.Database
 
             if (mSqlTransaction == null)
             {
-                this.BeginTransaction();
+                BeginTransaction();
                 wrappedCommand = true;
             }
 
@@ -324,7 +324,7 @@ namespace System.Core.Database
 
             if (mSqlTransaction == null)
             {
-                this.BeginTransaction();
+                BeginTransaction();
                 wrappedCommand = true;
             }
 
@@ -338,7 +338,7 @@ namespace System.Core.Database
                 sqlBulkCopy.BatchSize = batchSize;
                 sqlBulkCopy.NotifyAfter = batchSize;
                 sqlBulkCopy.BulkCopyTimeout = timeout;
-                sqlBulkCopy.SqlRowsCopied += new SqlRowsCopiedEventHandler(sqlBulkCopy_SqlRowsCopied);
+                sqlBulkCopy.SqlRowsCopied += (sqlBulkCopy_SqlRowsCopied);
                 sqlBulkCopy.WriteToServer(dataTable);
                 
                 if (wrappedCommand == true)
@@ -779,7 +779,7 @@ namespace System.Core.Database
             {
                 if (mSqlTransaction == null)
                 {
-                    this.BeginTransaction();
+                    BeginTransaction();
                     wrappedCommand = true;
                 }
 
@@ -834,7 +834,7 @@ namespace System.Core.Database
                 }
                 if (wrappedCommand)
                 {
-                    this.Commit();
+                    Commit();
                 }
             }
             catch (Exception ex)
@@ -845,7 +845,7 @@ namespace System.Core.Database
                 {
                     mSqlTransaction.Dispose();
                     mSqlTransaction = null;
-                }
+                }   
 
                 throw new DatabaseException(GetResourceString("SYSTEM_ERROR_FAILED_TO_EXECUTE_COMMAND", command.CommandText), ex);
             }

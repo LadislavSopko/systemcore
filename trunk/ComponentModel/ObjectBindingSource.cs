@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Core.Design;
 using System.Core.Helpers;
 using System.Drawing;
 using System.Windows.Forms;
@@ -11,6 +12,7 @@ namespace System.Core.ComponentModel
     /// support for nested property accessors.
     /// </summary>
     [ToolboxBitmap(typeof(ResFinder), "System.Core.Bitmaps.ObjectDataSource.png")]
+    [ToolboxItem(typeof(ObjectBindingSourceToolBoxItem))]
     public partial class ObjectBindingSource : BindingSource
     {
        
@@ -191,5 +193,8 @@ namespace System.Core.ComponentModel
 
         #endregion
 
+        
+
+        
     }
 }

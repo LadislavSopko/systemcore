@@ -144,7 +144,7 @@ namespace System.Core.Forms
         }
 
         /// <summary>
-        /// /// Creates a new instance of the <see cref="FormFader"/> class
+        /// Creates a new instance of the <see cref="FormFader"/> class
         /// </summary>
         /// <param name="targetForm">The target form that the fade effect will be applied to</param>
         /// <param name="frames">The number of frames to be used in the fade transition.</param>
@@ -157,6 +157,7 @@ namespace System.Core.Forms
             targetForm.HandleCreated += (targetForm_HandleCreated);
             targetForm.HandleDestroyed += (targetForm_HandleDestroyed);
             targetForm.FormClosing += (targetForm_FormClosing);
+            targetForm.Load += new EventHandler(targetForm_Load);
             _targetForm = targetForm;
 
             _timer = new Timer(_duration / _frames);
@@ -166,6 +167,22 @@ namespace System.Core.Forms
 
             //Calculate the opacity increase/decrease amount for each frame            
             _alphaStep = (byte)(255 / _frames);
+            
+        }
+
+       
+
+        void targetForm_Load(object sender, EventArgs e)
+        {
+            //Check to see if the form is about to be shown
+          
+                //Make sure that we are dealing with a layered window
+                EnsureLayeredWindow();
+                //Set the fade oparetion                      
+                _fadeOperation = FadeOperation.FadeIn;
+                //Start the transition
+                _timer.Enabled = true;
+          
         }
 
         #endregion
@@ -178,7 +195,7 @@ namespace System.Core.Forms
         /// <param name="opacity"></param>
         private void SetOpacity(byte opacity)
         {
-            SetLayeredWindowAttributes(_targetForm.Handle, 0, opacity, LWA_ALPHA);
+            SetLayeredWindowAttributes(_targetForm.Handle, 0, opacity, LWA_ALPHA);            
         }
 
         /// <summary>
@@ -195,7 +212,7 @@ namespace System.Core.Forms
 
         void targetForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (!e.Cancel)
+            if (!e.Cancel && e.CloseReason == CloseReason.UserClosing)
             {
                 //Make sure that we are not already in a fading process.
                 //This can happen if the fade in operation is not finished before the user closes the form
@@ -259,6 +276,7 @@ namespace System.Core.Forms
         /// </summary>        
         void targetForm_HandleDestroyed(object sender, EventArgs e)
         {
+            _timer.Stop();
             ReleaseHandle();
         }
 
@@ -272,29 +290,7 @@ namespace System.Core.Forms
 
         #endregion
 
-        #region Protected Overridden Methods
-
-        protected override void WndProc(ref Message m)
-        {
-            if (m.Msg == WM_SHOWWINDOW)
-            {
-                //Check to see if the form is about to be shown
-                if ((int)m.WParam != 0)
-                {
-                    //Make sure that we are dealing with a layered window
-                    EnsureLayeredWindow();
-                    //Set the fade oparetion                      
-                    _fadeOperation = FadeOperation.FadeIn;
-                    //Start the transition
-                    _timer.Enabled = true;
-                }
-            }
-
-            //Default behaviour. Process messaged as normal
-            base.WndProc(ref m);
-        }
-
-        #endregion
+        
 
     }
 }

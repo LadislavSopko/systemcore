@@ -32,14 +32,22 @@
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Design" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bitmaps\ResFinder.cs" />
+    <Compile Include="Collections\BindingListView.cs" />
+    <Compile Include="Collections\DictionaryChangedEventArgs.cs" />
+    <Compile Include="Collections\ExtendedDictionary.cs" />
     <Compile Include="Collections\HybridCollection.cs" />
+    <Compile Include="Collections\IExtendedDictionary.cs" />
     <Compile Include="Collections\IKeyProvider.cs" />
+    <Compile Include="Collections\NonGenericSortComparer.cs" />
+    <Compile Include="Collections\SortComparer.cs" />
+    <Compile Include="Collections\TypedArrayList.cs" />
     <Compile Include="ComponentModel\BindableProperty.cs" />
     <Compile Include="ComponentModel\ObjectBindingSource.cs">
       <SubType>Component</SubType>
@@ -55,8 +63,68 @@
     <Compile Include="Database\Resources\ErrorCodes.Designer.cs" />
     <Compile Include="Database\StoredProcedure.cs" />
     <Compile Include="Database\StoredProcedureDictionary.cs" />
+    <Compile Include="Design\DropDownDesigner.cs" />
+    <Compile Include="Design\LookupDropDownActionList.cs" />
+    <Compile Include="Design\LookupDropDownDataMemberConverter.cs" />
+    <Compile Include="Design\LookupDropDownDesigner.cs" />
+    <Compile Include="Design\ObjectBindingSourceToolBoxItem.cs" />
+    <Compile Include="Forms\Calendar.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Forms\ControlBase.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Forms\ControlBase.Designer.cs">
+      <DependentUpon>ControlBase.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\DropDownBaseEdit.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Forms\DropDownBaseEdit.Designer.cs">
+      <DependentUpon>DropDownBaseEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\DropDownButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Forms\DropDownButton.Designer.cs">
+      <DependentUpon>DropDownButton.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\DropDownClosedEventArgs.cs" />
+    <Compile Include="Forms\DropDownColumn.cs" />
+    <Compile Include="Forms\DropDownForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\DropDownForm.Designer.cs">
+      <DependentUpon>DropDownForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\EditBase.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Forms\EditBase.Designer.cs">
+      <DependentUpon>EditBase.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FilterColumn.cs" />
+    <Compile Include="Forms\FocusEmulator.cs" />
     <Compile Include="Forms\FormFader.cs" />
+    <Compile Include="Forms\LookupDropDown.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Forms\LookupDropDown.Designer.cs">
+      <DependentUpon>LookupDropDown.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\LookupDropDownCell.cs" />
+    <Compile Include="Forms\LookupDropDownColumn.cs" />
+    <Compile Include="Forms\LookupDropDownEditingControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Forms\TextBoxEx.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Forms\TextBoxEx.Designer.cs">
+      <DependentUpon>TextBoxEx.cs</DependentUpon>
+    </Compile>
     <Compile Include="Helpers\ApplicationEnvironment.cs" />
+    <Compile Include="Helpers\ControlHelper.cs" />
     <Compile Include="Helpers\ReflectionHelper.cs" />
     <Compile Include="Emit\IDynamicAccessor.cs" />
     <Compile Include="Emit\DynamicAccessor.cs" />
@@ -80,6 +148,8 @@
     <Compile Include="Net\FtpConnection.cs" />
     <Compile Include="Net\FtpConnectionEventArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Serialization\IXmlSerializer.cs" />
+    <Compile Include="Serialization\XmlSerializer.cs" />
     <Compile Include="Validation\Attributes\LengthValidatorAttribute.cs" />
     <Compile Include="Validation\Attributes\RequiredValidatorAttribute.cs" />
     <Compile Include="Validation\Attributes\ValidatorAttributeBase.cs" />
@@ -98,10 +168,23 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
     <None Include="ToDoList.tdl" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Bitmaps\ObjectDataSource.png" />
+    <EmbeddedResource Include="Forms\DropDownBaseEdit.resx">
+      <DependentUpon>DropDownBaseEdit.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\DropDownButton.resx">
+      <DependentUpon>DropDownButton.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\DropDownForm.resx">
+      <DependentUpon>DropDownForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
