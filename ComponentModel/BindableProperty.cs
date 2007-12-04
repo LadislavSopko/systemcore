@@ -27,15 +27,9 @@ namespace System.Core.ComponentModel
         /// <remarks>
         /// Nested properies can be described as property paths. Ex Person.Address.StreetAddress
         /// </remarks>
-        /// </param>
-        /// <param name="caption">When the property is displayed in ex. a grid control, the nested property name 
-        /// will display as Person_Address_StreetAddress in order to make the property unique.        /// 
-        /// <remarks>
-        /// 
-        /// </remarks>
-        /// </param>
-        
-        public BindableProperty(string name, string caption)
+        /// </param>                
+        /// </param>        
+        public BindableProperty(string name)
         {
             _name = name;
         }
