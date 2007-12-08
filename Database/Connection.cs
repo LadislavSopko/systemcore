@@ -97,7 +97,7 @@ namespace System.Core.Database
         }
 
         /// <summary>
-        /// Creates a new instance of the <see cref="DbDotNet.Connection"/> class
+        /// Creates a new instance of the <see cref="Connection"/> class
         /// </summary>
         /// <param name="connectionString">The connection string used to create a connection to the Sql Server</param>
         public Connection(string connectionString)
