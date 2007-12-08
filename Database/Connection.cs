@@ -76,7 +76,7 @@ namespace System.Core.Database
         #endregion
 
         #region Constructors
-        /// <overloads>Initializes a new instance of the <see cref="DbDotNet.Connection"/> class</overloads>	
+        /// <overloads>Initializes a new instance of the <see cref="Connection"/> class</overloads>	
         /// <summary>
         /// Initializes a new instance of the <see cref="DbDotNet.Connection"/> class
         /// </summary>
