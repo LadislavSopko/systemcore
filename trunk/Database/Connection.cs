@@ -13,7 +13,7 @@ using System.Text;
 namespace System.Core.Database
 {
     /// <summary>
-    /// A connection class that provides a simplified way to execute sql statements and stored procedures 
+    /// A connection class that provides a simplified way to execute sql statements and stored procedures.
     /// </summary>
     public class Connection : IDisposable
     {
