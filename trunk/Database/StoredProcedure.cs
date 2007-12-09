@@ -11,7 +11,7 @@ namespace System.Core.Database
     /// <summary>
     /// This class is used to execute stored procedures against a Microsoft SQL Server.
     /// </summary>
-    /// <example>The following example shows how to call a stored procedure using DbDotNet
+    /// <example>The following example shows how to call a stored procedure using DbDotNet.
     /// <code>
     /// Connection connection = new Connection();
     /// connection.StoredProcedures["MyStoredProcedure"].ExecuteNonQuery("MyStringParameterValue");
