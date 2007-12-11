@@ -10,12 +10,21 @@ namespace System.Core.Collections
     /// <typeparam name="TKey">The type of keys in the dictionary.</typeparam>
     /// <typeparam name="TValue">The type of values in the dictionary.</typeparam>
     [Serializable]
-    public class ExtendedDictionary<TKey, TValue> : IExtendedDictionary<TKey, TValue>
+    public class ExtendedDictionary<TKey, TValue> : IExtendedDictionary<TKey, TValue>, IList<TValue>,IList
     {
 
         #region Private Member Variables
 
+        /// <summary>
+        /// Contains the elements in the form of a <see cref="IDictionary{TKey,TValue}"/>.
+        /// </summary>
         private readonly IDictionary<TKey, TValue> _dictionary;
+
+        /// <summary>
+        /// Contains the elements in the form of a <see cref="IList{T}"/>.
+        /// </summary>
+        private readonly IList<TValue> _list;
+
 
         #endregion
 
@@ -27,6 +36,7 @@ namespace System.Core.Collections
         public ExtendedDictionary()
         {
             _dictionary = new Dictionary<TKey, TValue>();
+            _list = new List<TValue>();
         }
 
         /// <summary>
@@ -37,6 +47,7 @@ namespace System.Core.Collections
         public ExtendedDictionary(IDictionary<TKey, TValue> dictionary)
         {
             _dictionary = new Dictionary<TKey, TValue>(dictionary);
+            _list = new List<TValue>((ICollection<TValue>)dictionary);
         }
 
         #endregion
@@ -94,6 +105,79 @@ namespace System.Core.Collections
             OnDictionaryChanged(new DictionaryChangedEventArgs<TKey, TValue>(key, value, DictionaryChangedType.ItemRemoved));
         }
 
+        /// <summary>
+        /// Validates the <paramref name="type"/> to see if it is valid according to the generic type parameters,<typeparamref name="TKey"/>  and <typeparamref name="TValue"/>. 
+        /// </summary>
+        /// <param name="type">The type to validate</param>
+        private static void ValidateType(Type type)
+        {
+            ValidateObjectType(type);
+            ValidateKeyProvider(type);
+        }
+
+        /// <summary>
+        /// Validates the <paramref name="type"/> to see if it is valid according to the generic type parameter <typeparamref name="TValue"/>. 
+        /// </summary>
+        /// <param name="type">The type to validate</param>
+        private static void ValidateObjectType(Type type)
+        {
+            if (!typeof(TValue).IsAssignableFrom(type))
+            {
+                throw new ArgumentException(string.Format("The supplied value is invalid. The value has to be {0}", typeof(TValue).Name));
+            }
+        }
+
+        /// <summary>
+        /// Validates the <paramref name="type"/> to see if it implements the <see cref="IKeyProvider{T}"/> interface.
+        /// </summary>
+        /// <param name="type">The type to validate</param>
+        private static void ValidateKeyProvider(Type type)
+        {
+            if (!typeof(IKeyProvider<TKey>).IsAssignableFrom(type))
+            {
+                throw new ArgumentException(string.Format("The supplied value is invalid. In order to work with object without supplying the key, the object type has to implement IKeyProvider<{0}>", typeof(TKey).Name));
+            }
+        }
+
+
+        /// <summary>
+        /// Adds an item to the <see cref="_dictionary"/> and the <see cref="_list"/> collections.
+        /// </summary>
+        /// <param name="key">The key of the item to add</param>
+        /// <param name="value">The item to remove</param>
+        private int AddItem(TKey key, TValue value)
+        {
+            _dictionary.Add(key, value);
+            int newIndex = ((IList)_list).Add(value);
+            OnItemAdded(key,value);
+            return newIndex;
+        }
+
+
+        /// <summary>
+        /// Removes an item from the <see cref="_dictionary"/> and the <see cref="_list"/> collections.
+        /// </summary>
+        /// <param name="key">The key of the value to remove</param>
+        /// <param name="value">The value to remove</param>
+        /// <returns>true if the element is successfully removed; otherwise, false.  This method also returns false if key was not found in the original <see cref="IDictionary{TKey,TValue}"/></returns>        
+        private bool RemoveItem(TKey key, TValue value)
+        {
+            if (_dictionary.Remove(key))
+            {
+                _list.Remove(value);
+                OnItemRemoved(key,value);                
+                return true;
+            }
+            return false;
+        }
+
+        private void ClearItems()
+        {
+            _list.Clear();
+            _dictionary.Clear();
+        }
+
+
         #endregion
 
         #region Protected Methods
@@ -142,13 +226,8 @@ namespace System.Core.Collections
         /// <param name="item">The item to be added to the dictionary.</param>
         public void Add(object item)
         {
-            if (!typeof(IKeyProvider<TKey>).IsAssignableFrom(item.GetType()))
-            {
-                throw new ArgumentException("Object has to implement IKeyProvider<TKey>", "item");
-            }
-            else                              
-                _dictionary.Add(((IKeyProvider<TKey>)item).Key, (TValue)item);
-                
+            ValidateType(item.GetType());                        
+            AddItem(((IKeyProvider<TKey>)item).Key, (TValue)item);                                
         }
 
         #endregion
@@ -178,21 +257,9 @@ namespace System.Core.Collections
         /// <param name="value">The item to be added to the dictionary.</param>
         public void Add<T>(T value) where T : TValue, IKeyProvider<TKey>
         {
-            Add(value.Key, value);
+            AddItem(value.Key, value);
         }
 
-        /// <summary>
-        /// Removes an item from the dictionary.
-        /// </summary>
-        /// <remarks>
-        /// This method requires the <paramref name="value"/> to implement the <see cref="IKeyProvider{T}"/> interface.
-        /// </remarks>
-        /// <typeparam name="T">The type of object to remove</typeparam>
-        /// <param name="value">The item to be removed from the dictionary.</param>
-        public void Remove<T>(T value) where T : TValue, IKeyProvider<TKey>
-        {
-            Remove(value.Key);
-        }
 
         ///<summary>
         ///Determines whether the <see cref="IDictionary{TKey,TValue}"></see> contains an element with the specified key.
@@ -206,6 +273,30 @@ namespace System.Core.Collections
             return ContainsKey(value.Key);
         }
 
+        /// <summary>
+        /// Removes an item from the dictionary.
+        /// </summary>
+        /// <remarks>
+        /// This method requires the <paramref name="value"/> to implement the <see cref="IKeyProvider{T}"/> interface.
+        /// </remarks>
+        /// <typeparam name="T">The type of object to remove</typeparam>
+        /// <param name="value">The item to be removed from the dictionary.</param>
+        public bool Remove<T>(T value) where T : TValue, IKeyProvider<TKey>
+        {
+            return RemoveItem(value.Key,value);
+        }
+
+        public TValue this[int index]
+        {
+            get { return ((IList<TValue>)this)[index]; }
+            set { ((IList<TValue>)this)[index] = value; }
+        }
+
+
+        IEnumerator<TValue> IExtendedDictionary<TKey, TValue>.GetEnumerator()
+        {
+            return _dictionary.Values.GetEnumerator();
+        }
 
         #endregion
 
@@ -239,17 +330,21 @@ namespace System.Core.Collections
         public void Add(TKey key, TValue value)
         {          
             _dictionary.Add(key, value);
+            _list.Add(value);
             OnItemAdded(key, value);
         }
 
         ///<summary>
-        ///Removes all items from the <see cref="T:System.Collections.Generic.ICollection`1"></see>.
+        ///Gets an <see cref="T:System.Collections.Generic.ICollection`1"></see> containing the values in the <see cref="T:System.Collections.Generic.IDictionary`2"></see>.
         ///</summary>
         ///
-        ///<exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.ICollection`1"></see> is read-only. </exception>
-        public void Clear()
+        ///<returns>
+        ///An <see cref="T:System.Collections.Generic.ICollection`1"></see> containing the values in the object that implements <see cref="T:System.Collections.Generic.IDictionary`2"></see>.
+        ///</returns>
+        ///
+        public ICollection<TValue> Values
         {
-            _dictionary.Clear();
+            get { return _dictionary.Values; }
         }
 
         ///<summary>
@@ -277,16 +372,19 @@ namespace System.Core.Collections
         ///<exception cref="T:System.NotSupportedException">The property is set and the <see cref="T:System.Collections.Generic.IDictionary`2"></see> is read-only.</exception>
         ///<exception cref="T:System.ArgumentNullException">key is null.</exception>
         ///<exception cref="T:System.Collections.Generic.KeyNotFoundException">The property is retrieved and key is not found.</exception>
-        public TValue this[TKey key]
+        TValue IDictionary<TKey, TValue>.this[TKey key]
         {
             get { return _dictionary[key];}
-            set { _dictionary[key] = value; }
+            set
+            {
+                _dictionary[key] = value;
+                _list[_list.IndexOf(value)] = value;
+            }
         }
 
         ///<summary>
         ///Determines whether the <see cref="T:System.Collections.Generic.IDictionary`2"></see> contains an element with the specified key.
-        ///</summary>
-        ///
+        ///</summary>        
         ///<returns>
         ///true if the <see cref="T:System.Collections.Generic.IDictionary`2"></see> contains an element with the key; otherwise, false.
         ///</returns>
@@ -323,20 +421,17 @@ namespace System.Core.Collections
         ///<exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.IDictionary`2"></see> is read-only.</exception>
         ///<exception cref="T:System.ArgumentNullException">key is null.</exception>
         public bool Remove(TKey key)
-        {
-            if (_dictionary.ContainsKey(key))
+        {            
+            TValue value = _dictionary[key];
+            if (_dictionary.Remove(key))
             {
-                TValue value = _dictionary[key];
-                if (_dictionary.Remove(key))
-                {
-                    OnItemRemoved(key, value);
-                    return true;
-                }
-                else
-                    return false;
+                _list.Remove(value);
+                OnItemRemoved(key, value);
+                return true;
             }
             else
                 return false;
+            
         }
 
         /// <summary>
@@ -350,17 +445,18 @@ namespace System.Core.Collections
             return _dictionary.TryGetValue(key, out value);
         }
 
+        
+
+
         ///<summary>
-        ///Gets an <see cref="T:System.Collections.Generic.ICollection`1"></see> containing the values in the <see cref="T:System.Collections.Generic.IDictionary`2"></see>.
+        ///Removes all items from the <see cref="T:System.Collections.Generic.ICollection`1"></see>.
         ///</summary>
         ///
-        ///<returns>
-        ///An <see cref="T:System.Collections.Generic.ICollection`1"></see> containing the values in the object that implements <see cref="T:System.Collections.Generic.IDictionary`2"></see>.
-        ///</returns>
-        ///
-        public ICollection<TValue> Values
+        ///<exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.ICollection`1"></see> is read-only. </exception>
+        void ICollection<TValue>.Clear()
         {
-            get { return _dictionary.Values; }
+            _dictionary.Clear();
+            _list.Clear();
         }
 
         #endregion
@@ -369,8 +465,7 @@ namespace System.Core.Collections
 
         public void Add(KeyValuePair<TKey, TValue> item)
         {
-            _dictionary.Add(item);
-            OnItemAdded(item.Key, item.Value);
+            AddItem(item.Key, item.Value);            
         }
 
         public bool Contains(KeyValuePair<TKey, TValue> item)
@@ -390,14 +485,18 @@ namespace System.Core.Collections
 
         public bool Remove(KeyValuePair<TKey, TValue> item)
         {
-            if (_dictionary.Remove(item))
-            {
-                OnItemRemoved(item.Key, item.Value);
-                return true;
-            }
-            else
-                return false;
+            return RemoveItem(item.Key, item.Value);
+        }
 
+
+        ///<summary>
+        ///Removes all items from the <see cref="T:System.Collections.Generic.ICollection`1"></see>.
+        ///</summary>
+        ///
+        ///<exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.ICollection`1"></see> is read-only. </exception>
+        public void Clear()
+        {
+            ClearItems();
         }
 
         #endregion
@@ -406,7 +505,7 @@ namespace System.Core.Collections
 
         IEnumerator<KeyValuePair<TKey, TValue>> IEnumerable<KeyValuePair<TKey, TValue>>.GetEnumerator()
         {
-            return ((IEnumerator<KeyValuePair<TKey, TValue>>)_dictionary);
+            return _dictionary.GetEnumerator();            
         }
 
         #endregion
@@ -427,6 +526,246 @@ namespace System.Core.Collections
         }
 
         #endregion
+              
+        #region IList<TValue> Members
 
+        ///<summary>
+        ///Gets or sets the element at the specified index.
+        ///</summary>
+        ///
+        ///<returns>
+        ///The element at the specified index.
+        ///</returns>
+        ///
+        ///<param name="index">The zero-based index of the element to get or set.</param>
+        ///<exception cref="T:System.ArgumentOutOfRangeException">index is not a valid index in the <see cref="IList{T}"></see>.</exception>
+        ///<exception cref="T:System.NotSupportedException">The property is set and the <see cref="IList{T}"></see> is read-only.</exception>
+        TValue IList<TValue>.this[int index]
+        {
+            get
+            {
+                return _list[index];
+            }
+            set
+            {
+                ValidateKeyProvider(typeof(TValue));
+                _list[index] = value;
+                _dictionary[((IKeyProvider<TKey>)value).Key] = value;
+            }
+        }
+
+        ///<summary>
+        ///Determines the index of a specific item in the <see cref="T:System.Collections.Generic.IList`1"></see>.
+        ///</summary>
+        ///
+        ///<returns>
+        ///The index of item if found in the list; otherwise, -1.
+        ///</returns>
+        ///
+        ///<param name="item">The object to locate in the <see cref="T:System.Collections.Generic.IList`1"></see>.</param>
+        int IList<TValue>.IndexOf(TValue item)
+        {
+            return _list.IndexOf(item);
+        }
+
+
+        ///<summary>
+        ///Inserts an item to the <see cref="T:System.Collections.Generic.IList`1"></see> at the specified index.
+        ///</summary>
+        ///
+        ///<param name="item">The object to insert into the <see cref="T:System.Collections.Generic.IList`1"></see>.</param>
+        ///<param name="index">The zero-based index at which item should be inserted.</param>
+        ///<exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.IList`1"></see> is read-only.</exception>
+        ///<exception cref="T:System.ArgumentOutOfRangeException">index is not a valid index in the <see cref="T:System.Collections.Generic.IList`1"></see>.</exception>
+        void IList<TValue>.Insert(int index, TValue item)
+        {
+            ValidateKeyProvider(typeof(TValue));
+            _dictionary.Add(((IKeyProvider<TKey>)item).Key, item);
+            _list.Insert(index, item);
+            OnItemAdded(((IKeyProvider<TKey>)item).Key, item);            
+        }
+
+        ///<summary>
+        ///Removes the <see cref="T:System.Collections.Generic.IList`1"></see> item at the specified index.
+        ///</summary>
+        ///
+        ///<param name="index">The zero-based index of the item to remove.</param>
+        ///<exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.IList`1"></see> is read-only.</exception>
+        ///<exception cref="T:System.ArgumentOutOfRangeException">index is not a valid index in the <see cref="T:System.Collections.Generic.IList`1"></see>.</exception>
+        void IList<TValue>.RemoveAt(int index)
+        {
+            RemoveItem(((IKeyProvider<TKey>)_list[index]).Key, _list[index]);
+        }
+
+        #endregion
+                       
+        #region ICollection<TValue> Members
+
+
+
+        ///<summary>
+        ///Adds an item to the <see cref="T:System.Collections.Generic.ICollection`1"></see>.
+        ///</summary>
+        ///
+        ///<param name="item">The object to add to the <see cref="T:System.Collections.Generic.ICollection`1"></see>.</param>
+        ///<exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.ICollection`1"></see> is read-only.</exception>
+        void ICollection<TValue>.Add(TValue item)
+        {
+            ValidateKeyProvider(typeof(TValue));
+            AddItem(((IKeyProvider<TKey>)item).Key, item);
+        }
+        
+
+
+        
+        ///<summary>
+        ///Removes the specific object from the <see cref="T:System.Collections.Generic.ICollection`1"></see>.
+        ///</summary>
+        ///
+        ///<returns>
+        ///true if item was successfully removed from the <see cref="T:System.Collections.Generic.ICollection`1"></see>; otherwise, false. This method also returns false if item is not found in the original <see cref="T:System.Collections.Generic.ICollection`1"></see>.
+        ///</returns>
+        ///
+        ///<param name="item">The object to remove from the <see cref="T:System.Collections.Generic.ICollection`1"></see>.</param>
+        ///<exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.ICollection`1"></see> is read-only.</exception>
+        public bool Remove(TValue item)
+        {                        
+            ValidateKeyProvider(typeof(TValue));
+            return RemoveItem(((IKeyProvider<TKey>)item).Key, item);
+        }
+
+
+        ///<summary>
+        ///Determines whether the <see cref="T:System.Collections.Generic.ICollection`1"></see> contains a specific value.
+        ///</summary>
+        ///
+        ///<returns>
+        ///true if item is found in the <see cref="T:System.Collections.Generic.ICollection`1"></see>; otherwise, false.
+        ///</returns>
+        ///
+        ///<param name="item">The object to locate in the <see cref="T:System.Collections.Generic.ICollection`1"></see>.</param>
+        public bool Contains(TValue item)
+        {
+            return _list.Contains(item);
+        }
+
+
+        ///<summary>
+        ///Copies the elements of the <see cref="T:System.Collections.Generic.ICollection`1"></see> to an <see cref="T:System.Array"></see>, starting at a particular <see cref="T:System.Array"></see> index.
+        ///</summary>
+        ///
+        ///<param name="array">The one-dimensional <see cref="T:System.Array"></see> that is the destination of the elements copied from <see cref="T:System.Collections.Generic.ICollection`1"></see>. The <see cref="T:System.Array"></see> must have zero-based indexing.</param>
+        ///<param name="arrayIndex">The zero-based index in array at which copying begins.</param>
+        ///<exception cref="T:System.ArgumentOutOfRangeException">arrayIndex is less than 0.</exception>
+        ///<exception cref="T:System.ArgumentNullException">array is null.</exception>
+        ///<exception cref="T:System.ArgumentException">array is multidimensional.-or-arrayIndex is equal to or greater than the length of array.-or-The number of elements in the source <see cref="T:System.Collections.Generic.ICollection`1"></see> is greater than the available space from arrayIndex to the end of the destination array.-or-Type T cannot be cast automatically to the type of the destination array.</exception>
+        public void CopyTo(TValue[] array, int arrayIndex)
+        {
+            _list.CopyTo(array, arrayIndex);
+        }
+
+
+        #endregion
+
+
+        #region IList Members
+
+        int IList.Add(object value)
+        {
+            ValidateType(value.GetType());            
+            return AddItem(((IKeyProvider<TKey>)value).Key, (TValue)value);                                
+        }
+
+        void IList.Clear()
+        {
+            ClearItems();
+        }
+
+        ///<summary>
+        ///Determines whether the <see cref="T:System.Collections.IList"></see> contains a specific value.
+        ///</summary>
+        ///
+        ///<returns>
+        ///true if the <see cref="T:System.Object"></see> is found in the <see cref="T:System.Collections.IList"></see>; otherwise, false.
+        ///</returns>
+        ///
+        ///<param name="value">The <see cref="T:System.Object"></see> to locate in the <see cref="T:System.Collections.IList"></see>. </param><filterpriority>2</filterpriority>
+        bool IList.Contains(object value)
+        {
+            return ((IList)_list).Contains(value);
+        }
+
+        int IList.IndexOf(object value)
+        {
+            return ((IList)_list).IndexOf(value);
+        }
+
+        void IList.Insert(int index, object value)
+        {
+            ValidateType(value.GetType());
+            _dictionary.Add(((IKeyProvider<TKey>)value).Key, (TValue)value);
+            _list.Insert(index, (TValue)value);
+            OnItemAdded(((IKeyProvider<TKey>)value).Key, (TValue)value);  
+        }
+
+        bool IList.IsFixedSize
+        {
+            get { return ((IList)_list).IsFixedSize; }
+        }
+
+        bool IList.IsReadOnly
+        {
+            get { return ((IList)_list).IsReadOnly; }
+        }
+
+        void IList.Remove(object value)
+        {
+            ValidateType(value.GetType());
+            RemoveItem(((IKeyProvider<TKey>)value).Key, (TValue)value);
+        }
+
+        void IList.RemoveAt(int index)
+        {
+            ((IList<TValue>)this).RemoveAt(index);
+        }
+
+        object IList.this[int index]
+        {
+            get
+            {
+                return ((IList<TValue>)this)[index];
+            }
+            set
+            {
+                ValidateType(value.GetType());
+                ((IList<TValue>)this)[index] = (TValue)value;
+            }
+        }
+
+        #endregion
+
+        #region ICollection Members
+
+        void ICollection.CopyTo(Array array, int index)
+        {
+            ((ICollection)_list).CopyTo(array,index);
+        }
+
+        int ICollection.Count
+        {
+            get { return ((ICollection)_list).Count; }
+        }
+
+        bool ICollection.IsSynchronized
+        {
+            get { return ((ICollection)_list).IsSynchronized; }
+        }
+
+        object ICollection.SyncRoot
+        {
+            get { return ((ICollection)_list).SyncRoot; }
+        }
+
+        #endregion
     }
 }
