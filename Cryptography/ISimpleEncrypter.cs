@@ -8,7 +8,7 @@ namespace System.Core.Cryptography
     /// <remarks> 
     /// Use this interface to implement simple symmetric cryptographic transformations.
     /// </remarks>    
-    public interface ISimpleEncrypter
+    public interface ISimpleCryptoTransformer
     {
         /// <summary>
         /// Encrypts a stream using the <paramref name="key"/> as the encryption key.

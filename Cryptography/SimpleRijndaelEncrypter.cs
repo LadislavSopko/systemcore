@@ -8,7 +8,7 @@ namespace System.Core.Cryptography
     /// <summary>
     /// Performs simple cryptographic transformatations using the Rijndael algorithm. 
     /// </summary>
-    public class SimpleRijndaelEncrypter : ISimpleEncrypter
+    public class SimpleRijndaelTransformer : ISimpleCryptoTransformer
     {
 
         #region Private Member Variables
