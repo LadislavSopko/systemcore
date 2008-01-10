@@ -10,7 +10,7 @@ namespace System.Core.Collections
     /// <typeparam name="TKey">The type of keys in the dictionary.</typeparam>
     /// <typeparam name="TValue">The type of values in the dictionary.</typeparam>
     [Serializable]
-    public class ExtendedDictionary<TKey, TValue> : IExtendedDictionary<TKey, TValue>, IList<TValue>,IList
+    public class ExtendedDictionary<TKey, TValue> : IExtendedDictionary<TKey, TValue>, IList<TValue>, IList
     {
 
         #region Private Member Variables
@@ -26,6 +26,9 @@ namespace System.Core.Collections
         private readonly IList<TValue> _list;
 
 
+        private readonly IDictionary<int, TKey> _keys;
+
+
         #endregion
 
         #region Constructors
@@ -34,10 +37,8 @@ namespace System.Core.Collections
         /// Creates a new instance of the <see cref="ExtendedDictionary{TKey,TValue}"/> class.
         /// </summary>
         public ExtendedDictionary()
-        {
-            _dictionary = new Dictionary<TKey, TValue>();
-            _list = new List<TValue>();
-        }
+            : this(new Dictionary<TKey, TValue>()) { }
+        
 
         /// <summary>
         /// Creates a new instance of the <see cref="ExtendedDictionary{TKey,TValue}"/> class 
@@ -47,7 +48,16 @@ namespace System.Core.Collections
         public ExtendedDictionary(IDictionary<TKey, TValue> dictionary)
         {
             _dictionary = new Dictionary<TKey, TValue>(dictionary);
-            _list = new List<TValue>((ICollection<TValue>)dictionary);
+
+                        
+            _list = new List<TValue>(dictionary.Values);
+            _keys = new Dictionary<int, TKey>();
+
+            //Make sure that tje keys collection is in sync with the base collection
+            foreach (KeyValuePair<TKey, TValue> pair in _dictionary)
+            {
+                _keys.Add(_list.IndexOf(pair.Value), pair.Key);
+            }
         }
 
         #endregion
@@ -87,10 +97,11 @@ namespace System.Core.Collections
         /// <param name="value">The item that has been added to the dictionary.</param>
         private void OnItemAdded(TKey key, TValue value)
         {
+            _keys.Add(_list.IndexOf(value), key);
             WirePropertyChanged(value);
             if (DictionaryChanged != null)
             {
-                DictionaryChanged(this, new DictionaryChangedEventArgs<TKey, TValue>(key, value, DictionaryChangedType.ItemAdded));
+                DictionaryChanged(this, new DictionaryChangedEventArgs<TKey, TValue>(key, _list.IndexOf(value), value, DictionaryChangedType.ItemAdded));
             }
         }
 
@@ -101,8 +112,9 @@ namespace System.Core.Collections
         /// <param name="value">The item that has been removed.</param>
         private void OnItemRemoved(TKey key, TValue value)
         {
+            _keys.Remove(_list.IndexOf(value));
             UnWirePropertyChanged(value);
-            OnDictionaryChanged(new DictionaryChangedEventArgs<TKey, TValue>(key, value, DictionaryChangedType.ItemRemoved));
+            OnDictionaryChanged(new DictionaryChangedEventArgs<TKey, TValue>(key, _list.IndexOf(value), value, DictionaryChangedType.ItemRemoved));
         }
 
         /// <summary>
@@ -149,7 +161,7 @@ namespace System.Core.Collections
         {
             _dictionary.Add(key, value);
             int newIndex = ((IList)_list).Add(value);
-            OnItemAdded(key,value);
+            OnItemAdded(key, value);
             return newIndex;
         }
 
@@ -165,7 +177,7 @@ namespace System.Core.Collections
             if (_dictionary.Remove(key))
             {
                 _list.Remove(value);
-                OnItemRemoved(key,value);                
+                OnItemRemoved(key, value);
                 return true;
             }
             return false;
@@ -175,6 +187,7 @@ namespace System.Core.Collections
         {
             _list.Clear();
             _dictionary.Clear();
+            _keys.Clear();
         }
 
 
@@ -198,37 +211,39 @@ namespace System.Core.Collections
 
 
         /// <summary>
-        /// Raises the <see cref="ItemChanged"/> event.
+        /// Raises the <see cref="DictionaryChanged"/> event.
         /// </summary>
         /// <remarks>
         /// In order for this method to be called, the item type has to implement the <see cref="INotifyPropertyChanged"/> interface.
         /// </remarks>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">A <see cref="PropertyChangedEventArgs"/>PropertyChangedEventArgs that contains the event data.</param>
-        protected virtual void OnItemPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void OnItemPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (ItemChanged != null)
-            {
-                ItemChanged(sender, e);
-            }
+            TKey key;
+            if (!typeof(IKeyProvider<TKey>).IsAssignableFrom(sender.GetType()))
+                key = default(TKey);
+            else
+                key = ((IKeyProvider<TKey>)sender).Key;
+            OnDictionaryChanged(new DictionaryChangedEventArgs<TKey, TValue>(key, _list.IndexOf((TValue)sender), (TValue)sender, e.PropertyName, DictionaryChangedType.ItemChanged));
         }
 
         #endregion
 
         #region Public Methods
 
-        /// <summary>
-        /// Adds a new item to the dictionary.
-        /// </summary>
-        /// <remarks>
-        /// This method is required to support serialization and should not be used directly from code.
-        /// </remarks>
-        /// <param name="item">The item to be added to the dictionary.</param>
-        public void Add(object item)
-        {
-            ValidateType(item.GetType());                        
-            AddItem(((IKeyProvider<TKey>)item).Key, (TValue)item);                                
-        }
+        ///// <summary>
+        ///// Adds a new item to the dictionary.
+        ///// </summary>
+        ///// <remarks>
+        ///// This method is required to support serialization and should not be used directly from code.
+        ///// </remarks>
+        ///// <param name="item">The item to be added to the dictionary.</param>
+        //public void Add(object item)
+        //{
+        //    ValidateType(item.GetType());
+        //    AddItem(((IKeyProvider<TKey>)item).Key, (TValue)item);
+        //}
 
         #endregion
 
@@ -261,6 +276,12 @@ namespace System.Core.Collections
         }
 
 
+        public void Add(TValue value)
+        {
+            ValidateKeyProvider(value.GetType());
+            AddItem(((IKeyProvider<TKey>)value).Key,value);
+        }
+
         ///<summary>
         ///Determines whether the <see cref="IDictionary{TKey,TValue}"></see> contains an element with the specified key.
         ///The key is defined by the type implementing the <see cref="IKeyProvider{T}"/> interface.
@@ -273,6 +294,20 @@ namespace System.Core.Collections
             return ContainsKey(value.Key);
         }
 
+
+        /// <summary>
+        /// Determines the index of a specific item in the <see cref="IExtendedDictionary{TKey,TValue}"/>
+        /// </summary>
+        /// <param name="value">The object to locate in the <see cref="IExtendedDictionary{TKey,TValue}"/></param>
+        /// <returns>The key of the item if found, otherwise Default(TKey) </returns>
+        public TKey KeyOf(TValue value)
+        {
+            if (_keys.ContainsKey(_list.IndexOf(value)))
+                return _keys[_list.IndexOf(value)];
+            else
+                return default(TKey);
+        }
+
         /// <summary>
         /// Removes an item from the dictionary.
         /// </summary>
@@ -283,8 +318,9 @@ namespace System.Core.Collections
         /// <param name="value">The item to be removed from the dictionary.</param>
         public bool Remove<T>(T value) where T : TValue, IKeyProvider<TKey>
         {
-            return RemoveItem(value.Key,value);
+            return RemoveItem(value.Key, value);
         }
+
 
         public TValue this[int index]
         {
@@ -328,7 +364,7 @@ namespace System.Core.Collections
         ///<exception cref="T:System.ArgumentException">An element with the same key already exists in the <see cref="T:System.Collections.Generic.IDictionary`2"></see>.</exception>
         ///<exception cref="T:System.ArgumentNullException">key is null.</exception>
         public void Add(TKey key, TValue value)
-        {          
+        {
             _dictionary.Add(key, value);
             _list.Add(value);
             OnItemAdded(key, value);
@@ -374,7 +410,7 @@ namespace System.Core.Collections
         ///<exception cref="T:System.Collections.Generic.KeyNotFoundException">The property is retrieved and key is not found.</exception>
         TValue IDictionary<TKey, TValue>.this[TKey key]
         {
-            get { return _dictionary[key];}
+            get { return _dictionary[key]; }
             set
             {
                 _dictionary[key] = value;
@@ -421,7 +457,7 @@ namespace System.Core.Collections
         ///<exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.IDictionary`2"></see> is read-only.</exception>
         ///<exception cref="T:System.ArgumentNullException">key is null.</exception>
         public bool Remove(TKey key)
-        {            
+        {
             TValue value = _dictionary[key];
             if (_dictionary.Remove(key))
             {
@@ -431,7 +467,7 @@ namespace System.Core.Collections
             }
             else
                 return false;
-            
+
         }
 
         /// <summary>
@@ -445,7 +481,7 @@ namespace System.Core.Collections
             return _dictionary.TryGetValue(key, out value);
         }
 
-        
+
 
 
         ///<summary>
@@ -454,9 +490,8 @@ namespace System.Core.Collections
         ///
         ///<exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.ICollection`1"></see> is read-only. </exception>
         void ICollection<TValue>.Clear()
-        {
-            _dictionary.Clear();
-            _list.Clear();
+        {            
+            ClearItems();
         }
 
         #endregion
@@ -465,7 +500,7 @@ namespace System.Core.Collections
 
         public void Add(KeyValuePair<TKey, TValue> item)
         {
-            AddItem(item.Key, item.Value);            
+            AddItem(item.Key, item.Value);
         }
 
         public bool Contains(KeyValuePair<TKey, TValue> item)
@@ -505,7 +540,7 @@ namespace System.Core.Collections
 
         IEnumerator<KeyValuePair<TKey, TValue>> IEnumerable<KeyValuePair<TKey, TValue>>.GetEnumerator()
         {
-            return _dictionary.GetEnumerator();            
+            return _dictionary.GetEnumerator();
         }
 
         #endregion
@@ -526,7 +561,7 @@ namespace System.Core.Collections
         }
 
         #endregion
-              
+
         #region IList<TValue> Members
 
         ///<summary>
@@ -582,7 +617,7 @@ namespace System.Core.Collections
             ValidateKeyProvider(typeof(TValue));
             _dictionary.Add(((IKeyProvider<TKey>)item).Key, item);
             _list.Insert(index, item);
-            OnItemAdded(((IKeyProvider<TKey>)item).Key, item);            
+            OnItemAdded(((IKeyProvider<TKey>)item).Key, item);
         }
 
         ///<summary>
@@ -598,7 +633,7 @@ namespace System.Core.Collections
         }
 
         #endregion
-                       
+
         #region ICollection<TValue> Members
 
 
@@ -614,10 +649,10 @@ namespace System.Core.Collections
             ValidateKeyProvider(typeof(TValue));
             AddItem(((IKeyProvider<TKey>)item).Key, item);
         }
-        
 
 
-        
+
+
         ///<summary>
         ///Removes the specific object from the <see cref="T:System.Collections.Generic.ICollection`1"></see>.
         ///</summary>
@@ -629,7 +664,7 @@ namespace System.Core.Collections
         ///<param name="item">The object to remove from the <see cref="T:System.Collections.Generic.ICollection`1"></see>.</param>
         ///<exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.ICollection`1"></see> is read-only.</exception>
         public bool Remove(TValue item)
-        {                        
+        {
             ValidateKeyProvider(typeof(TValue));
             return RemoveItem(((IKeyProvider<TKey>)item).Key, item);
         }
@@ -667,13 +702,12 @@ namespace System.Core.Collections
 
         #endregion
 
-
         #region IList Members
 
         int IList.Add(object value)
         {
-            ValidateType(value.GetType());            
-            return AddItem(((IKeyProvider<TKey>)value).Key, (TValue)value);                                
+            ValidateType(value.GetType());
+            return AddItem(((IKeyProvider<TKey>)value).Key, (TValue)value);
         }
 
         void IList.Clear()
@@ -705,7 +739,7 @@ namespace System.Core.Collections
             ValidateType(value.GetType());
             _dictionary.Add(((IKeyProvider<TKey>)value).Key, (TValue)value);
             _list.Insert(index, (TValue)value);
-            OnItemAdded(((IKeyProvider<TKey>)value).Key, (TValue)value);  
+            OnItemAdded(((IKeyProvider<TKey>)value).Key, (TValue)value);
         }
 
         bool IList.IsFixedSize
@@ -748,7 +782,7 @@ namespace System.Core.Collections
 
         void ICollection.CopyTo(Array array, int index)
         {
-            ((ICollection)_list).CopyTo(array,index);
+            ((ICollection)_list).CopyTo(array, index);
         }
 
         int ICollection.Count

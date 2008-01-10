@@ -34,6 +34,15 @@ namespace System.Core.Collections
         /// </remarks>       
         bool Contains<T>(T value) where T : TValue, IKeyProvider<TKey>;
 
+
+        /// <summary>
+        /// Determines the index of a specific item in the <see cref="IExtendedDictionary{TKey,TValue}"/>
+        /// </summary>
+        /// <param name="value">The object to locate in the <see cref="IExtendedDictionary{TKey,TValue}"/></param>
+        /// <returns>The key of the item if found, otherwise Default(TKey) </returns>
+        TKey KeyOf(TValue value);
+
+
         /// <summary>
         /// Adds a new item to the dictinary
         /// </summary>
@@ -43,6 +52,10 @@ namespace System.Core.Collections
         /// <typeparam name="T">The type of object to add</typeparam>
         /// <param name="value">The item to be added to the dictionary.</param>
         void Add<T>(T value) where T : TValue, IKeyProvider<TKey>;
+
+
+        void Add(TValue value);
+
 
         
 
@@ -60,11 +73,7 @@ namespace System.Core.Collections
         /// <param name="value">The item to be removed from the dictionary.</param>
         bool Remove<T>(T value) where T : TValue, IKeyProvider<TKey>;
 
-      
 
-       
-
-      
-        IEnumerator<TValue> GetEnumerator();
+        new IEnumerator<TValue> GetEnumerator();
     }
 }
