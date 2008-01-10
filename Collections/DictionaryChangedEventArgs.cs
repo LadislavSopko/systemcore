@@ -6,15 +6,20 @@ namespace System.Core.Collections
     public enum DictionaryChangedType
     {
         /// <summary>
-        /// An item is added to the dictionary
+        /// An item is added to the dictionary.
         /// </summary>
         ItemAdded,
         
         /// <summary>
-        /// An item is removed from the dictionary
+        /// An item is removed from the dictionary.
         /// </summary>
         ItemRemoved,
         
+        /// <summary>
+        /// An item in the dictionary is changed.
+        /// </summary>
+        ItemChanged,
+
         /// <summary>
         /// The dictionary is cleared
         /// </summary>
@@ -37,9 +42,21 @@ namespace System.Core.Collections
         private readonly TKey _key;
 
         /// <summary>
+        /// The index of the item causing the change in the dictionary.
+        /// </summary>
+        private readonly int _index;
+
+        /// <summary>
         /// The item that is causing the change in the dictionary.
         /// </summary>
         private readonly TValue _value;
+
+        /// <summary>
+        /// The name of the property causing the item to change. 
+        /// </summary>
+        private readonly string _propertyName;
+
+
 
         /// <summary>
         /// The type of change made to the dictionary.
@@ -54,12 +71,27 @@ namespace System.Core.Collections
         /// Creates a new instance of the <see cref="DictionaryChangedEventArgs{TKey,TValue}"/> class.
         /// </summary>
         /// <param name="key">The key of the item causing the change in the dictionary.</param>
+        /// <param name="index">The index of the item causing the change in the dictionary.</param>
         /// <param name="value">The item that is causing the change in the dictionary.</param>
         /// <param name="dictionaryChangedType">A <see cref="DictionaryChangedType"/> value indicating the type of change.</param>
-        public DictionaryChangedEventArgs(TKey key, TValue value, DictionaryChangedType dictionaryChangedType)
+        public DictionaryChangedEventArgs(TKey key, int index, TValue value, DictionaryChangedType dictionaryChangedType)
+            : this(key, index, value, null, dictionaryChangedType) { }
+        
+
+        /// <summary>
+        /// Creates a new instance of the <see cref="DictionaryChangedEventArgs{TKey,TValue}"/> class.
+        /// </summary>
+        /// <param name="key">The key of the item causing the change in the dictionary.</param>
+        /// <param name="index">The index of the item causing the change in the dictionary.</param>
+        /// <param name="value">The item that is causing the change in the dictionary.</param>
+        /// <param name="propertyName">The name of the property causing the item to change.</param>
+        /// <param name="dictionaryChangedType">A <see cref="DictionaryChangedType"/> value indicating the type of change.</param>
+        public DictionaryChangedEventArgs(TKey key, int index, TValue value, string propertyName, DictionaryChangedType dictionaryChangedType)
         {
-            _value = value;
             _key = key;
+            _index = index;
+            _value = value;
+            _propertyName = propertyName;
             _dictionaryChangedType = dictionaryChangedType;
         }
 
@@ -81,6 +113,24 @@ namespace System.Core.Collections
         public TKey Key
         {
             get { return _key; }
+        }
+
+
+        /// <summary>
+        /// Gets the index of the item causing the change in the dictionary.
+        /// </summary>
+        public int Index
+        {
+            get { return _index; }
+        }
+
+
+        /// <summary>
+        /// Gets the name of the property causing the item to change. 
+        /// </summary>
+        public string PropertyName
+        {
+            get { return _propertyName; }
         }
 
         /// <summary>

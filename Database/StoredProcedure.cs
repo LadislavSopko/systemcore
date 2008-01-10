@@ -158,6 +158,7 @@ namespace System.Core.Database
         
 
         #region DataTable
+        
         /// <summary>
         /// Executes the stored procedure and returns a <see cref="System.Data.DataTable"/>.
         /// </summary>
@@ -168,7 +169,7 @@ namespace System.Core.Database
                 Connection.ExecutionType.ExecuteDataTableWithSchema : Connection.ExecutionType.ExecuteDataTable;
             return (DataTable)mConnection.ExecuteCommand(executionType, mSqlCommand);
         }
-
+        
         /// <summary>
         /// Executes the stored procedure and returns a <see cref="System.Data.DataTable"/>.
         /// </summary>
@@ -190,7 +191,34 @@ namespace System.Core.Database
                 Connection.ExecutionType.ExecuteDataTableWithSchema : Connection.ExecutionType.ExecuteDataTable;
             return (DataTable)mConnection.ExecuteCommand(executionType, mSqlCommand);
         }
-                
+
+        /// <summary>
+        /// Executes the stored procedure and returns a <see cref="System.Data.DataSet"/>.
+        /// </summary>
+        /// <returns><see cref="System.Data.DataSet"/></returns>
+        public DataSet ExecuteDataSet()
+        {
+            Connection.ExecutionType executionType = mFillSchema ?
+                Connection.ExecutionType.ExecuteDataSetWithSchema : Connection.ExecutionType.ExecuteDataSet;
+            return (DataSet)mConnection.ExecuteCommand(executionType, mSqlCommand);
+        }
+
+
+        /// <summary>
+        /// Executes the stored procedure and returns a <see cref="System.Data.DataSet"/>.
+        /// </summary>
+        /// <param name="parameters">A <see cref="System.Object"/> array containing zero of more parameters values</param>
+        /// <returns><see cref="System.Data.DataSet"/></returns>
+        public DataSet ExecuteDataSet(params object[] parameters)
+        {
+            FillParameters(parameters);
+            Connection.ExecutionType executionType = mFillSchema  ?
+                Connection.ExecutionType.ExecuteDataSetWithSchema : Connection.ExecutionType.ExecuteDataSet;
+            return (DataSet)mConnection.ExecuteCommand(executionType, mSqlCommand);
+        }
+
+
+
         #endregion
 
         #region NonQuery

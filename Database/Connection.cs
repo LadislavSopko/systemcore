@@ -34,7 +34,7 @@ namespace System.Core.Database
         /// <summary>
         /// Reflects the type of command to execute
         /// </summary>
-        internal enum ExecutionType { ExecuteNonQuery, ExecuteScalar, ExecuteDataTable, ExecuteDataTableWithSchema, ExecuteReader, ExecuteXmlReader };
+        internal enum ExecutionType { ExecuteNonQuery, ExecuteScalar, ExecuteDataTable, ExecuteDataTableWithSchema,ExecuteDataSet,ExecuteDataSetWithSchema, ExecuteReader, ExecuteXmlReader };
 
         /// <summary>
         /// The SqlConnection object that is used to connect to the database
@@ -56,7 +56,7 @@ namespace System.Core.Database
         /// <summary>
         /// Used to get the embedded resources in this assembly 
         /// </summary>
-        private static ResourceManager mResourceManager = new ResourceManager("System.Core.Database.Resources.ErrorCodes", Assembly.GetExecutingAssembly());
+        private static readonly ResourceManager mResourceManager = new ResourceManager("System.Core.Database.Resources.ErrorCodes", Assembly.GetExecutingAssembly());
 
         /// <summary>
         /// This collection contains all the stored procedures executed on this connection. 
@@ -124,7 +124,7 @@ namespace System.Core.Database
             }
             catch (Exception ex)
             {
-                throw new DatabaseException(GetResourceString("SYSTEM_ERROR_FAILED_TO_INITIALIZE", mConnectionString != null ? mConnectionString : "null"), ex);
+                throw new DatabaseException(GetResourceString("SYSTEM_ERROR_FAILED_TO_INITIALIZE", mConnectionString ?? "null"), ex);
             }
         }
 
@@ -214,9 +214,9 @@ namespace System.Core.Database
                 dataAdapter.SelectCommand = CreateSelectCommand(dataTable);
                 commandBuilder.DataAdapter = dataAdapter;
                 dataAdapter.Update(dataTable);
-                if (wrappedCommand == true)
+                if (wrappedCommand)
                 {
-                    this.Commit();
+                    Commit();
                 }
             }
             catch (Exception ex)
@@ -341,9 +341,9 @@ namespace System.Core.Database
                 sqlBulkCopy.SqlRowsCopied += (sqlBulkCopy_SqlRowsCopied);
                 sqlBulkCopy.WriteToServer(dataTable);
                 
-                if (wrappedCommand == true)
+                if (wrappedCommand )
                 {
-                    this.Commit();
+                    Commit();
                 }
                 
                 sqlBulkCopy.Close();
@@ -546,7 +546,7 @@ namespace System.Core.Database
         }
 
         ///<summary>
-        /// The <see cref="DbDotNet.StoredProcedure"/> collection used to execute stored procedures on this <see cref="DbDotNet.Connection"/>.
+        /// The <see cref="StoredProcedure"/> collection used to execute stored procedures on this <see cref="Connection"/>.
         /// </summary>
         public StoredProcedureDictionary StoredProcedures
         {
@@ -579,6 +579,33 @@ namespace System.Core.Database
             return ExecuteDataTable(command, fillSchema);
         }
 
+
+        /// <summary>
+        /// Executes the <paramref name="commandText"/> and returns a <see cref="System.Data.DataSet"/>.
+        /// </summary>
+        /// <param name="commandText">The SQL statement to be executed</param>
+        /// <returns><see cref="System.Data.DataSet"/></returns>
+        public DataSet ExecuteDataSet(string commandText)
+        {
+            SqlCommand command = CreateCommand(CommandType.Text, commandText);
+            return (DataSet)ExecuteCommand(ExecutionType.ExecuteDataSet, command);
+        }
+
+
+        /// <summary>
+        /// Executes the <paramref name="commandText"/> and returns a <see cref="System.Data.DataSet"/>.
+        /// </summary>
+        /// <param name="commandText">The SQL statement to be executed</param>
+        /// <param name="fillSchema">Setting this to true, will include the schema in the DataTable</param>
+        /// <returns><see cref="System.Data.DataSet"/></returns>
+        public DataSet ExecuteDataSet(string commandText,bool fillSchema)
+        {
+            SqlCommand command = CreateCommand(CommandType.Text, commandText);
+            return ExecuteDataSet(command, fillSchema);
+        }
+
+
+
         /// <summary>
         /// Executes the <paramref name="command"/> and returns a <see cref="System.Data.DataTable"/>.
         /// </summary>
@@ -587,10 +614,24 @@ namespace System.Core.Database
         /// <returns><see cref="System.Data.DataTable"/></returns>
         public DataTable ExecuteDataTable(SqlCommand command, bool fillSchema)
         {
-            Connection.ExecutionType executionType = fillSchema == true ?
-                Connection.ExecutionType.ExecuteDataTableWithSchema : Connection.ExecutionType.ExecuteDataTable;
+            ExecutionType executionType = fillSchema  ?
+                ExecutionType.ExecuteDataTableWithSchema : ExecutionType.ExecuteDataTable;
             PrepareCommand(command);
             return (DataTable)ExecuteCommand(executionType, command);
+        }
+
+        /// <summary>
+        /// Executes the <paramref name="command"/> and returns a <see cref="System.Data.DataSet"/>.
+        /// </summary>
+        /// <param name="command">The command to be executed</param>
+        /// <param name="fillSchema">Setting this to true, will include the schema in the DataSet</param>
+        /// <returns><see cref="System.Data.DataSet"/></returns>
+        public DataSet ExecuteDataSet(SqlCommand command, bool fillSchema)
+        {
+            ExecutionType executionType = fillSchema  ?
+                ExecutionType.ExecuteDataSetWithSchema : ExecutionType.ExecuteDataSet;
+            PrepareCommand(command);
+            return (DataSet)ExecuteCommand(executionType, command);
         }
 
 
@@ -807,6 +848,20 @@ namespace System.Core.Database
                             returnValue = dt;
                             break;
                         }
+                    case ExecutionType.ExecuteDataSet:
+                    case ExecutionType.ExecuteDataSetWithSchema:
+                        {
+                            SqlDataAdapter da = new SqlDataAdapter(command);
+                            DataSet ds = new DataSet();
+                            ds.Locale = CultureInfo.InvariantCulture;
+                            if (executionType == ExecutionType.ExecuteDataSetWithSchema)
+                            {
+                                da.FillSchema(ds, SchemaType.Source);
+                            }
+                            da.Fill(ds);
+                            returnValue = ds;
+                            break;
+                        }
 
                     case ExecutionType.ExecuteReader:
                         {
@@ -821,7 +876,7 @@ namespace System.Core.Database
                         }
 
                     case ExecutionType.ExecuteXmlReader:
-                        {
+                        {                            
                             returnValue = command.ExecuteXmlReader();
                             break;
                         }
@@ -911,7 +966,7 @@ namespace System.Core.Database
 
 
         /// <summary>
-        /// Releases all resources related to this instance of the <see cref="DbDotNet.Connection"/> 
+        /// Releases all resources related to this instance of the <see cref="Connection"/> 
         /// If the conection is in a transaction, a rollback will be executed 
         /// </summary>
         public void Dispose()

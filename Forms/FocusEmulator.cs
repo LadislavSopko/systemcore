@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows.Forms;
 
 namespace System.Core.Forms
@@ -38,7 +35,7 @@ namespace System.Core.Forms
                 if (((int)m.WParam) == 0)
                 {
                     // If so reactivate it.
-                    SendMessage(this.Handle, WM_NCACTIVATE, 1, IntPtr.Zero);
+                    SendMessage(Handle, WM_NCACTIVATE, 1, IntPtr.Zero);
                 }
             }
         }
