@@ -408,7 +408,7 @@ namespace System.Core.Collections
         ///<exception cref="T:System.NotSupportedException">The property is set and the <see cref="T:System.Collections.Generic.IDictionary`2"></see> is read-only.</exception>
         ///<exception cref="T:System.ArgumentNullException">key is null.</exception>
         ///<exception cref="T:System.Collections.Generic.KeyNotFoundException">The property is retrieved and key is not found.</exception>
-        TValue IDictionary<TKey, TValue>.this[TKey key]
+        public TValue this[TKey key]
         {
             get { return _dictionary[key]; }
             set
