@@ -60,7 +60,7 @@
     <Compile Include="Compression\ISimpleCompressor.cs" />
     <Compile Include="Compression\SimpleCompressor.cs" />
     <Compile Include="Cryptography\ISimpleEncrypter.cs" />
-    <Compile Include="Cryptography\SimpleEncrypter.cs" />
+    <Compile Include="Cryptography\SimpleRijndaelEncrypter.cs" />
     <Compile Include="Database\Connection.cs" />
     <Compile Include="Database\DatabaseExeption.cs" />
     <Compile Include="Database\ParameterCache.cs" />
