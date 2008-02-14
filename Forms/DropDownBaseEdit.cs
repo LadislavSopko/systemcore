@@ -1,15 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Core.Forms;
-using System.Core.Helpers;
+using System.Common.Forms;
+using System.Common.Helpers;
 using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using System.Core.Design;
+using System.Common.Design;
 
-namespace System.Core.Forms
+namespace System.Common.Forms
 {                           
     [Designer(typeof(DropDownDesigner))]    
     public abstract partial class DropDownBaseEdit : EditBase

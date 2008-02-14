@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace System.Core.Collections
+namespace System.Common.Collections
 {
     [Serializable]
     public class HybridCollection<TKey, TValue> : IDictionary<TKey,TValue>,IEnumerable<TValue>

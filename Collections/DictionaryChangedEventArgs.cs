@@ -1,4 +1,4 @@
-namespace System.Core.Collections
+namespace System.Common.Collections
 {
     /// <summary>
     /// Defines the type of change made to an <see cref="IExtendedDictionary{TKey,TValue}"/>.

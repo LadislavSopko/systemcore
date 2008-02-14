@@ -1,5 +1,5 @@
 ﻿using System;
-namespace System.Core.Logging
+namespace System.Common.Logging
 {
     public interface ILogger
     {

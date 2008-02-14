@@ -6,7 +6,7 @@ using System.Xml;
 using System.Collections.Generic;
 using System.Text;
 
-namespace System.Core.Database
+namespace System.Common.Database
 {
     /// <summary>
     /// This class is used to execute stored procedures against a Microsoft SQL Server.

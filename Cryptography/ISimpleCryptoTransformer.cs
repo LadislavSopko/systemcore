@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace System.Core.Cryptography
+namespace System.Common.Cryptography
 {
     /// <summary>
     /// Defines the basic operations for encryption and decrypting operations.

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace System.Core.Validation
+namespace System.Common.Validation
 {
     public class RequiredValidator : ValidatorBase
     {

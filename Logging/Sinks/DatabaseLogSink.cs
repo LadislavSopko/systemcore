@@ -4,7 +4,7 @@ using System.Text;
 using System.Data.SqlClient;
 using System.Data;
 
-namespace System.Core.Logging
+namespace System.Common.Logging
 {
     /// <summary>
     /// Writes a <see cref="LogItem"/> to a database table

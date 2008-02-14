@@ -4,7 +4,7 @@ using System.Reflection;
 
 
 
-namespace System.Core.Validation
+namespace System.Common.Validation
 {
     /// <summary>
     /// Base class for implementing validation attributes

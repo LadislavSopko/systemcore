@@ -1,7 +1,7 @@
 using System.IO;
 using System.IO.Compression;
 
-namespace System.Core.Compression
+namespace System.Common.Compression
 {
     /// <summary>
     /// Performs simple compression and decompression of file streams.

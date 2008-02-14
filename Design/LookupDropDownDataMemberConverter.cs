@@ -5,7 +5,7 @@ using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Text;
 
-namespace System.Core.Design
+namespace System.Common.Design
 {
     public class LookupDropDownDataMemberConverter : StringConverter
     {

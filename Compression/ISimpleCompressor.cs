@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace System.Core.Compression
+namespace System.Common.Compression
 {
     /// <summary>
     /// Defines the basic operations for compression and decompression

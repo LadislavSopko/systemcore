@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace System.Core.Database.Resources {
+namespace System.Common.Database.Resources {
     using System;
     
     

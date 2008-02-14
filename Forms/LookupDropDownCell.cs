@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Text;
 using System.Windows.Forms;
 
-namespace System.Core.Forms
+namespace System.Common.Forms
 {
     public class LookupDropDownCell : DataGridViewTextBoxCell
     {

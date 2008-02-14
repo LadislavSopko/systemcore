@@ -5,7 +5,7 @@ using System.Windows.Forms;
 using Timer = System.Timers.Timer;
 
 
-namespace System.Core.Forms
+namespace System.Common.Forms
 {
     /// <summary>
     /// Adds fade transitions to a standard form. 

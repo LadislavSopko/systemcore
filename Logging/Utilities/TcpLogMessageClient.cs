@@ -4,7 +4,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Net;
 using System.Net.Sockets;
-namespace System.Core.Logging
+namespace System.Common.Logging
 {
     /// <summary>
     /// Provides a simple approach towards reading log messages from a <see cref="TcpLogSink"/>.

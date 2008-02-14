@@ -10,7 +10,7 @@ using System.Xml;
 using System.Reflection;
 using System.Threading;
 using System.Text;
-namespace System.Core.Database
+namespace System.Common.Database
 {
     /// <summary>
     /// A connection class that provides a simplified way to execute sql statements and stored procedures.
@@ -56,7 +56,7 @@ namespace System.Core.Database
         /// <summary>
         /// Used to get the embedded resources in this assembly 
         /// </summary>
-        private static readonly ResourceManager mResourceManager = new ResourceManager("System.Core.Database.Resources.ErrorCodes", Assembly.GetExecutingAssembly());
+        private static readonly ResourceManager mResourceManager = new ResourceManager("System.Common.Database.Resources.ErrorCodes", Assembly.GetExecutingAssembly());
 
         /// <summary>
         /// This collection contains all the stored procedures executed on this connection. 
@@ -105,6 +105,34 @@ namespace System.Core.Database
             mConnectionString = connectionString;
             Initialize();
         }
+
+        /// <summary>
+        ///  Creates a new instance of the <see cref="Connection"/> class
+        /// </summary>
+        /// <param name="server">The name of the server to connect to.</param>
+        /// <param name="database">The name of the database</param>
+        /// <param name="username">The name of the user used to log on to the server.</param>
+        /// <param name="password">The password used to log on to the server</param>
+        public Connection(string server, string database,string username,string password)
+        {
+            mConnectionString = CreateConnectionString(server, database, username, password);
+            Initialize();
+        }
+
+        /// <summary>
+        ///  Creates a new instance of the <see cref="Connection"/> class
+        /// </summary>
+        /// <remarks>
+        /// Connects to the server using integrated security.
+        /// </remarks>
+        /// <param name="server">The name of the server to connect to.</param>
+        /// <param name="database">The name of the database</param>        
+        public Connection(string server, string database)
+        {
+            mConnectionString = CreateConnectionString(server, database);
+            Initialize();
+        }
+
         #endregion
 
         #region Private

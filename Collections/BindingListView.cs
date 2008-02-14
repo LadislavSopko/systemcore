@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
 
-namespace System.Core.Collections
+namespace System.Common.Collections
 {
 
 
@@ -21,12 +21,11 @@ namespace System.Core.Collections
          new ListSortDescriptionCollection();
         private List<T> m_OriginalCollection = new List<T>();
 
-        public BindingListView()
-            : base()
+        public BindingListView()           
         {
         }
 
-        public BindingListView(List<T> list)
+        public BindingListView(IList<T> list)
             : base(list)
         {
         }

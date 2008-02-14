@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Reflection;
 using System.Text;
 
-namespace System.Core.Helpers
+namespace System.Common.Helpers
 {
     /// <summary>
     /// Contains helper functions related to reflection

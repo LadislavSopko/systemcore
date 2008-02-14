@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace System.Core.Logging
+namespace System.Common.Logging
 {
         /// <summary>
         /// Describes the severity of the log message.

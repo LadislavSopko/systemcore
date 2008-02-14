@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml;
 
-namespace System.Core.Logging
+namespace System.Common.Logging
 {
     /// <summary>
     /// Represents a configured sink in the applications configuration file

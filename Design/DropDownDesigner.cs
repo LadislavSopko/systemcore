@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms.Design;
-namespace System.Core.Design
+namespace System.Common.Design
 {
     public class DropDownDesigner : ControlDesigner
     {

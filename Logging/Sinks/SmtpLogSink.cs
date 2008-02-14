@@ -5,7 +5,7 @@ using System.Net;
 using System.Net.Mail;
 
 
-namespace System.Core.Logging
+namespace System.Common.Logging
 {
     /// <summary>
     /// Writes a <see cref="LogItem"/> to a smtp server

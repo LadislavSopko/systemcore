@@ -1,4 +1,4 @@
-namespace System.Core.Forms
+namespace System.Common.Forms
 {
     partial class ControlBase
     {

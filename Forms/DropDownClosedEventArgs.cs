@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
 
-namespace System.Core.Forms
+namespace System.Common.Forms
 {
     public class DropDownClosedEventArgs : EventArgs
     {

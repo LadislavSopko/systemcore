@@ -1,8 +1,8 @@
 using System.ComponentModel;
-using System.Core.Emit;
-using System.Core.Helpers;
+using System.Common.Emit;
+using System.Common.Helpers;
 
-namespace System.Core.ComponentModel
+namespace System.Common.ComponentModel
 {
     
     /// <summary>

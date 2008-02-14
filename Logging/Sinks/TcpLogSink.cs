@@ -8,7 +8,7 @@ using System.IO;
 
 
 
-namespace System.Core.Logging
+namespace System.Common.Logging
 {
     /// <summary>
     /// Writes a <see cref="LogItem"/> to a tcp socket network stream

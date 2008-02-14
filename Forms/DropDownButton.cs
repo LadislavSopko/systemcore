@@ -8,7 +8,7 @@ using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
 
 
-namespace System.Core.Forms
+namespace System.Common.Forms
 {
     [ToolboxItem(false)]
     public partial class DropDownButton : Control

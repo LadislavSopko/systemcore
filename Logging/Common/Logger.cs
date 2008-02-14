@@ -7,7 +7,7 @@ using System.Configuration;
 using System.Reflection;
 
 
-namespace System.Core.Logging
+namespace System.Common.Logging
 {
 	/// <summary>
     /// <b>This is the only class you will ever need to perform logging in your application.</b>

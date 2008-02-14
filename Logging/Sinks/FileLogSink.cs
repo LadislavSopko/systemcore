@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 using System.IO;
 using System.Reflection;
 
-namespace System.Core.Logging
+namespace System.Common.Logging
 {
     /// <summary>
     /// Writes a <see cref="LogItem"/> to a text file

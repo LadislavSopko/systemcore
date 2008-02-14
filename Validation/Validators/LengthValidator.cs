@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Text;
 
 
-namespace System.Core.Validation
+namespace System.Common.Validation
 {
     public class LengthValidator : ValidatorBase
     {

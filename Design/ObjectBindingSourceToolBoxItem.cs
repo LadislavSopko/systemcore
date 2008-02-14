@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Drawing.Design;
 using System.Text;
 
-namespace System.Core.Design
+namespace System.Common.Design
 {
     public class ObjectBindingSourceToolBoxItem : ToolboxItem
     {
