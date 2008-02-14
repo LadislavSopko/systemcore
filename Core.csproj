@@ -7,8 +7,8 @@
     <ProjectGuid>{6490CB19-D951-45E3-A16B-512BEDB8023B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>System.Core</RootNamespace>
-    <AssemblyName>System.Core</AssemblyName>
+    <RootNamespace>System.Common</RootNamespace>
+    <AssemblyName>System.Common</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
