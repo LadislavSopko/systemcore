@@ -2,7 +2,7 @@ using System;
 using System.Data.SqlClient;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
-namespace System.Core.Database
+namespace System.Common.Database
 {
 	/// <summary>
 	/// This exception is thrown DbDotNet encounters an error.

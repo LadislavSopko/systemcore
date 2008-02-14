@@ -6,7 +6,7 @@ using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
-namespace System.Core.Net
+namespace System.Common.Net
 {        
     /// <summary>
     /// Provides easy access to common operations against FTP servers

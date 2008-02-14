@@ -6,7 +6,7 @@ using System.Xml;
 using System.Collections;
 
 
-namespace System.Core.Logging
+namespace System.Common.Logging
 {
     /// <summary>
     /// Reads the LogDotNet configuration section in the application configuration file.

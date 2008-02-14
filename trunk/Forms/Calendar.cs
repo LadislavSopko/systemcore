@@ -3,6 +3,8 @@ using System.Windows.Forms;
 
 public class CalendarColumn : DataGridViewColumn
 {
+    private DevExpress.XtraEditors.HScrollBar hScrollBar1;
+
     public CalendarColumn()
         : base(new CalendarCell())
     {
@@ -24,6 +26,19 @@ public class CalendarColumn : DataGridViewColumn
             }
             base.CellTemplate = value;
         }
+    }
+
+    private void InitializeComponent()
+    {
+        this.hScrollBar1 = new DevExpress.XtraEditors.HScrollBar();
+        // 
+        // hScrollBar1
+        // 
+        this.hScrollBar1.Location = new System.Drawing.Point(0, 0);
+        this.hScrollBar1.Name = "hScrollBar1";
+        this.hScrollBar1.Size = new System.Drawing.Size(80, 17);
+        this.hScrollBar1.TabIndex = 0;
+
     }
 }
 

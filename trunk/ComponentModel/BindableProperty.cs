@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace System.Core.ComponentModel
+namespace System.Common.ComponentModel
 {
     /// <summary>
     /// Represent a bindable propery 

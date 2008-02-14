@@ -5,7 +5,7 @@ using System.Data.SqlClient;
 using System.Threading;
 
 
-namespace System.Core.Database
+namespace System.Common.Database
 {
 	/// <summary>
 	/// This class is used to cache parameters based 

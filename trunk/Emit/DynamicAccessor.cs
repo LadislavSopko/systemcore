@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
 
-namespace System.Core.Emit
+namespace System.Common.Emit
 {
     /// <summary>
     /// Implements the <see cref="IDynamicAccessor"/> and provides fast dynamic access to an object's fields and properties.

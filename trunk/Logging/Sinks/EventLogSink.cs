@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
 
-namespace System.Core.Logging
+namespace System.Common.Logging
 {
     class EventLogSink : LogSink
     {

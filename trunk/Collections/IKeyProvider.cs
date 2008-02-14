@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace System.Core.Collections
+namespace System.Common.Collections
 {
     /// <summary>
     /// A type implements this interface to provide a default key in 

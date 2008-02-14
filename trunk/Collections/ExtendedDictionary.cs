@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 
-namespace System.Core.Collections
+namespace System.Common.Collections
 {
     /// <summary>
     /// Implements the <see cref="IExtendedDictionary{TKey,TValue}"/> interface providing support for change notifications and serialization.
@@ -801,5 +801,6 @@ namespace System.Core.Collections
         }
 
         #endregion
+
     }
 }

@@ -1,6 +1,6 @@
-using System.Core.Collections;
+using System.Common.Collections;
 
-namespace System.Core.Emit
+namespace System.Common.Emit
 {
     /// <summary>
     /// Factory class used to create new instances of the <seealso cref="DynamicAccessor"/> class.

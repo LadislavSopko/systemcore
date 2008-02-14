@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
 
-namespace System.Core.Helpers
+namespace System.Common.Helpers
 {
     /// <summary>
     /// Contains helper functions related to controls

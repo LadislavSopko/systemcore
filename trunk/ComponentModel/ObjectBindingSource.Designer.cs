@@ -1,4 +1,4 @@
-namespace System.Core.ComponentModel
+namespace System.Common.ComponentModel
 {
     partial class ObjectBindingSource
     {

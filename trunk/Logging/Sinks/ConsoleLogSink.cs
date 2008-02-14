@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace System.Core.Logging
+namespace System.Common.Logging
 {
     /// <summary>
     /// Writes a <see cref="LogItem"/> to a the console window

@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Reflection;
 using System.Text;
 
-namespace System.Core.ComponentModel
+namespace System.Common.ComponentModel
 {
     public class CustomPropertyAttribute : Attribute
     {

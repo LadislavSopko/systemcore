@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace System.Core.Net
+namespace System.Common.Net
 {
     /// <summary>
     /// The delegate to be used in conjuction with the FtpConnectionEventArgs class

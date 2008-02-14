@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
 
-namespace System.Core.Forms
+namespace System.Common.Forms
 {
     [Serializable]
     public class DataColumn
@@ -20,7 +20,7 @@ namespace System.Core.Forms
             _dataField = dataField;
         }
 
-        [TypeConverter("System.Core.Design.LookupDropDownDataMemberConverter,System.Core.Design.dll")]
+        [TypeConverter("System.Common.Design.LookupDropDownDataMemberConverter,System.Common.Design.dll")]
         public string DataField
         {
             get { return _dataField; }

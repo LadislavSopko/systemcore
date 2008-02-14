@@ -1,7 +1,7 @@
-using System.Core.Helpers;
+using System.Common.Helpers;
 using System.Windows.Forms;
 
-namespace System.Core.Forms
+namespace System.Common.Forms
 {
     /// <summary>
     /// Base class for implementing user controls.
@@ -98,7 +98,7 @@ namespace System.Core.Forms
         /// <returns>true if the character was processed by the control; otherwise, false.</returns>
         protected virtual bool OnProcessCmdKey(Keys keyData)
         {
-            return false;
+            return false;                        
         }
 
         #endregion

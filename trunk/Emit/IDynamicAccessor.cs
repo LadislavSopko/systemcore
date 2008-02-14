@@ -1,4 +1,4 @@
-﻿namespace System.Core.Emit
+﻿namespace System.Common.Emit
 {
     /// <summary>
     /// Represents a dynamic property and field accessor that implements functions to dynamically get 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Collections;
 
-namespace System.Core.Logging
+namespace System.Common.Logging
 {
     public static class LogFactory
     {

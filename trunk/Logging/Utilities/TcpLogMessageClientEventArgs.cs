@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace System.Core.Logging
+namespace System.Common.Logging
 {
     /// <summary>
     /// Represents the method that will handle the <see cref="TcpLogMessageClient.MessageReceived">MessageReceived</see> event. 

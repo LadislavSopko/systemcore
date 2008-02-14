@@ -1,6 +1,6 @@
 using System.Windows.Forms;
 
-namespace System.Core.Forms
+namespace System.Common.Forms
 {
     /// <summary>
     /// This class makes sure that the title bar stays "active" even if the form looses focus.

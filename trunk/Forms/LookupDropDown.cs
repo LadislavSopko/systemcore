@@ -3,16 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
-using System.Core.Design;
+using System.Common.Design;
 using System.Data;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Text;
 using System.Windows.Forms;
-using System.Core.Emit;
-using System.Core.Collections;
+using System.Common.Emit;
+using System.Common.Collections;
 
-namespace System.Core.Forms
+namespace System.Common.Forms
 {        
     [Designer(typeof(LookupDropDownDesigner))]
     public partial class LookupDropDown : DropDownBaseEdit
@@ -56,15 +56,18 @@ namespace System.Core.Forms
             _dataGrid.AllowUserToResizeRows = false;
             _dataGrid.ReadOnly = true;
 
-
+            
             this.DropDownControl = _dataGrid;
 
             _dataGrid.SelectionChanged += new EventHandler(_dataGrid_SelectionChanged);                
         }
 
+        /// <summary>
+        /// Sets or gets the row height in the dropdown.
+        /// </summary>
         [Category("Appearance")]
         [DefaultValue(20)]
-        [Description("The height of the data rows in the dropdown")]
+        [Description("The height of the data rows in the dropdown")]       
         public int RowHeight
         {
             get { return _rowHeight; }
@@ -82,6 +85,9 @@ namespace System.Core.Forms
             set { _filterColumns = value; }
         }
 
+        /// <summary>
+        /// Determines if filtering should be performed on all available columns 
+        /// </summary>
         public bool FilterAllColumns
         {
             get { return _filterAllColumns; }

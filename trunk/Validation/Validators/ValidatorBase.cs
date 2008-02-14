@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Core;
-using System.Core.Emit;
+using System.Common.Emit;
 using System.Reflection;
 using System.Text;
 
-namespace System.Core.Validation
+namespace System.Common.Validation
 {
     /// <summary>
     /// Base class for implementing validators.

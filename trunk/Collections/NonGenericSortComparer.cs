@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Text;
 using System.Collections;
 
-namespace System.Core.Collections
+namespace System.Common.Collections
 {
     public class NonGenericSortComparer : IComparer
     {

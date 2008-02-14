@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 
-namespace System.Core.Database
+namespace System.Common.Database
 {
 	/// <summary>
 	/// This class is used only by DbDotNet and should not be used directly from code

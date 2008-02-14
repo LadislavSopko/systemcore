@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Design;
-using System.Core.Forms;
+using System.Common.Forms;
 using System.Drawing.Design;
 using System.Text;
 
-namespace System.Core.Design
+namespace System.Common.Design
 {
     public class LookupDropDownActionList : DesignerActionList
     {

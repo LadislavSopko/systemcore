@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Core.Collections;
+using System.Common.Collections;
 using System.Reflection;
-using PropertyValidators = System.Core.Collections.HybridCollection<string, System.Collections.Generic.IList<System.Core.Validation.ValidatorBase>>;
+using PropertyValidators = System.Common.Collections.HybridCollection<string, System.Collections.Generic.IList<System.Common.Validation.ValidatorBase>>;
 
-namespace System.Core.Validation
+namespace System.Common.Validation
 {
     public class ValidationManager
     {

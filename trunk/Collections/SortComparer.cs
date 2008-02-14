@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
 
-namespace System.Core.Collections
+namespace System.Common.Collections
 {
     public class SortComparer<T> : IComparer<T>
     {

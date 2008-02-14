@@ -5,7 +5,7 @@ using System.Drawing.Design;
 using System.Text;
 using System.Windows.Forms;
 
-namespace System.Core.Forms
+namespace System.Common.Forms
 {
     [Serializable]
     public class DropDownColumn : DataColumn

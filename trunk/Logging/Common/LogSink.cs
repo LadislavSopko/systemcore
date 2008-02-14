@@ -4,7 +4,7 @@ using System.Collections;
 using System.Text;
 using System.Threading;
 
-namespace System.Core.Logging
+namespace System.Common.Logging
 {
 	/// <summary>
 	/// Base class for implementing log sinks 

@@ -1,7 +1,7 @@
 using System.IO;
 using System.Reflection;
 
-namespace System.Core.Helpers
+namespace System.Common.Helpers
 {
     public static class ApplicationEnvironment
     {
