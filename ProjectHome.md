@@ -1,0 +1,1 @@
+A core library that contains simplified classes for database access, logging etc
